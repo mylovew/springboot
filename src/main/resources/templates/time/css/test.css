@@ -214,8 +214,8 @@
 .scrollbar-dynamic > .scroll-element.scroll-x {
     bottom: 2px;
     height: 8px;
-    left: 0;
-    width: 100%;
+    /*计算*/
+    width: 675px;
 }
 
 .scrollbar-dynamic > .scroll-element.scroll-y {
@@ -246,8 +246,8 @@
 
 .scrollbar-dynamic > .scroll-element .scroll-element_track { background-color: #e0e0e0; }
 .scrollbar-dynamic > .scroll-element .scroll-bar { background-color: #c2c2c2; }
-.scrollbar-dynamic > .scroll-element:hover .scroll-bar { background-color: #919191; }
-.scrollbar-dynamic > .scroll-element.scroll-draggable .scroll-bar { background-color: #919191; }
+.scrollbar-dynamic > .scroll-element:hover .scroll-bar { background-color: #515151; }
+.scrollbar-dynamic > .scroll-element.scroll-draggable .scroll-bar { background-color: #111111; }
 
 /* scrollbar height/width & offset from container borders */
 
