@@ -4,6 +4,7 @@
     border: 1px solid royalblue;
     color: red;
 }
+/*左侧厅号*/
 .body .left{
     /*border: 1px solid navy;*/
     float: left;
@@ -21,6 +22,7 @@
 .body .leftTFirst{
     margin-top: 35px;
 }
+/*右侧放置区*/
 .body .right{
     /*border: 1px solid navy;*/
 }
@@ -34,18 +36,22 @@
 .body .right .rightBody .rightTFirst{
     margin-top: 0px;
 }
+/*刻度尺*/
 .body .right .rightBody .time{
     margin-left: 10px;
     height: 35px;
     width: 1000px;
     /*border: 1px solid green;*/
     background-color: #0C0C0C;
+    z-index: 11;
 }
+
+
 /*时间线*/
 .timeLine{
-    border-left: 1px solid blue;
+    border-left: 1px solid red;
     position: absolute;
-    left: 0px;
+    left: 100px;
     z-index: 10;
 }
 

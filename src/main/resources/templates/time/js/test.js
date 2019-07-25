@@ -13,7 +13,7 @@ jQuery(document).ready(function(){
         jQuery('.scrollbar-inner').scrollbar({
             "onScroll":function (y,x) {
                 if(y.maxScroll > 0){
-                    //表示有滚动条
+                    //表示有纵向滚动条
                     //底部横向栏固定
                     jQuery('.scroll-element.scroll-x.scroll-scrollx_visible').position({
                         of: $( "."+divClass ),
