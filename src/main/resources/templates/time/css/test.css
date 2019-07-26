@@ -3,7 +3,6 @@
     height: 450px;
     background-color: #4E5465;
     float: left;
-    padding-top: 30px;
 }
 .data{
     width: 100%;
@@ -15,7 +14,7 @@
 
 
 .timeBody{
-    width: 1630px;
+    width: 1530px;
     height: 450px;
     color: red;
     font-size: 14px;
@@ -49,6 +48,10 @@
     /*border: 1px solid red;*/
     margin: 10px 0px;
     background-color: #4E5465;
+    position: relative;
+}
+.body .right .rightBody .rightT .dataT{
+    background-color: #00F7DE;
 }
 .body .right .rightBody .rightTFirst{
     margin-top: 0px;
@@ -103,7 +106,7 @@
     border-left: 1px solid red;
     position: absolute;
     left: 100px;
-    z-index: 10;
+    z-index: 11;
 }
 
 
