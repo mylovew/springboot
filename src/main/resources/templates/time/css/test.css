@@ -15,7 +15,7 @@
 
 .timeBody{
     width: 1530px;
-    height: 450px;
+    height: 900px;
     color: red;
     font-size: 14px;
     background-color: #0C0C0C;
@@ -33,7 +33,7 @@
     line-height: 60px;
     /*border: 1px solid red;*/
     margin: 10px;
-    background-color: #089bc8;
+    background-color: #5795f7;
 }
 .body .leftTFirst{
     margin-top: 35px;
@@ -52,6 +52,11 @@
 }
 .body .right .rightBody .rightT .dataT{
     background-color: #00F7DE;
+    z-index: 10;
+}
+.body .right .rightBody .rightT .dataTDisable{
+    background-color: #08d1ff;
+    z-index: 10;
 }
 .body .right .rightBody .rightTFirst{
     margin-top: 0px;
@@ -70,9 +75,10 @@
     height: 31px;
     width: 1500px;
     background-color: #0C0C0C;
-    z-index: 11;
+    z-index: 12;
     border-bottom:1px solid white;
     margin-bottom: 3px;
+    left: 1px;
 }
 .body .right .rightBody .time .line{
     height: 5px;
@@ -280,7 +286,7 @@
     margin: 0;
     padding: 0;
     position: absolute;
-    z-index: 10;
+    z-index: 12;
 }
 
 .scrollbar-dynamic > .scroll-element div {
@@ -346,3 +352,20 @@
     left: -12px;
 }
 .scrollbar-dynamic > .scroll-element.scroll-y.scroll-scrollx_visible .scroll-element_size { top: -12px; }
+
+
+
+
+
+/*layer.open弹出层样式*/
+.edit_class .layui-layer-title{
+    background-color: #7a7a7a;
+    color: white;
+    border-bottom: 1px solid black;
+}
+.edit_class .layui-layer-content{
+    background-color: #515151;
+    color: white;
+    border-bottom: 1px solid black;
+
+}
