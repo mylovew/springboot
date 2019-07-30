@@ -530,6 +530,7 @@ jQuery(document).ready(function () {
 
     //右键菜单
     function rightMenu(that) {
+        //记录被选中
         var tar = null;
         that.contextMenu({
             width: 110, // width
@@ -537,11 +538,10 @@ jQuery(document).ready(function () {
             bgColor: "#333", // 背景颜色
             color: "#fff", // 字体颜色
             fontSize: 12, // 字体大小
-            hoverBgColor: "#99CC66", // hover背景颜色
+            hoverBgColor: "#a7c4f7", // hover背景颜色
             target: function (ele) { // 当前元素
                 if ($(that).data("menu") == "hide")
                     $(".ul-context-menu").hide();
-
                 tar = ele;
             },
             menu: [

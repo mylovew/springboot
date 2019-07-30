@@ -33,7 +33,10 @@
     line-height: 60px;
     /*border: 1px solid red;*/
     margin: 10px;
-    background-color: #5795f7;
+    background-color: rgb(166, 219, 255);
+    color: black;
+    border-left: 3px solid white;
+    border-right: 3px solid white;
 }
 .body .leftTFirst{
     margin-top: 35px;
@@ -51,6 +54,7 @@
     position: relative;
 }
 .body .right .rightBody .rightT .dataT{
+    color: #111111;
     background-color: #00F7DE;
     z-index: 10;
 }
