@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试</title>
+    <link rel="stylesheet" href="layui/css/layui.css" />
+    <link rel="stylesheet" href="layui/css/layui.mobile.css" />
+    <script src="js/jquery.js"></script>
+    <script src="layui/layui.all.js"></script>
+</head>
+<body>
+<button onclick="edit()">测试</button>
+<!--<div class="layui-form">-->
+<!--    <div class="layui-form-item">-->
+<!--        <div class="layui-inline">-->
+<!--            <label class="layui-form-label">可选日期</label>-->
+<!--            <div class="layui-input-inline">-->
+<!--                <input type="text" class="layui-input" id="startDate" placeholder="yyyy-MM-dd">-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="layui-inline">-->
+<!--            <label class="layui-form-label">可选时间</label>-->
+<!--            <div class="layui-input-inline">-->
+<!--                <input type="text" class="layui-input" id="startTime" placeholder="HH:mm:ss">-->
+<!--            </div>-->
+<!--            <div class="layui-form-mid layui-word-aux">-->
+<!--                这里以控制在9:30-17:30为例-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+</body>
+<script>
+    var laydate = null;
+    var lay = layui.use(['laydate'],function () {
+        laydate  = layui.laydate;
+    })
+    function edit(that) {
+        layer.open({
+            title:'测试',
+            type: 1,
+            area: ['420px', '440px'], //宽高
+            content: '<div class="layui-form">\n' +
+                '  <div class="layui-form-item">\n' +
+                '    <div class="layui-inline">\n' +
+                '      <label class="layui-form-label">开始日期：</label>\n' +
+                '      <div class="layui-input-inline">\n' +
+                '        <input type="text" class="layui-input" id="startDate" placeholder="yyyy-MM-dd">\n' +
+                '      </div>\n' +
+                '    </div>\n' +
+                '    <div class="layui-inline">\n' +
+                '      <label class="layui-form-label">开始时间：</label>\n' +
+                '      <div class="layui-input-inline">\n' +
+                '        <input type="text" class="layui-input" id="startTime" placeholder="HH:mm">\n' +
+                '      </div>\n' +
+                '    </div>\n' +
+                '  </div>\n' +
+                '</div>',
+            success:function (layero, index) {
+                console.log("成功")
+                let nowDate = new Date();
+                let y = nowDate.getFullYear();
+                let M = nowDate.getMonth() + 1;
+                let d = nowDate.getDate();
+                let HH = nowDate.getHours();
+                let mm = nowDate.getMinutes();
+                let nextDayDate = new Date();
+                nextDayDate.setDate(nextDayDate.getDate() + 1);
+                let yy = nextDayDate.getFullYear();
+                let MM = nextDayDate.getMonth() + 1;
+                let dd = nextDayDate.getDate();
+
+                //初始化日期
+                laydate.render({
+                    elem: '#startDate'
+                    ,min: y + '-' + (M < 10 ? ('0' + M) : M) + '-' + (d < 10 ? ('0' + d) : d)
+                    ,max: yy + '-' + (MM < 10 ? ('0' + MM) : MM) + '-' + (dd < 10 ? ('0' + dd) : dd)
+                    ,done: function(value, date, endDate){
+                        console.log(value); //得到日期生成的值，如：2017-08-18
+                        console.log(date); //得到日期时间对象：{year: 2017, month: 8, date: 18, hours: 0, minutes: 0, seconds: 0}
+                        console.log(endDate); //得结束的日期时间对象，开启范围选择（range: true）才会返回。对象成员同上。
+                    }
+                });
+
+                //初始化时间
+                laydate.render({
+                    elem: '#startTime'
+                    ,type: 'time'
+                    ,format:'HH:mm'
+                });
+            }
+        });
+
+
+
+    }
+
+</script>
+</html>

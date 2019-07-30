@@ -367,5 +367,19 @@
     background-color: #515151;
     color: white;
     border-bottom: 1px solid black;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: 14px;
 
+}
+.edit_class .layui-layer-content .layui-input{
+    background-color: black;
+    height: 30px;
+    border: 1px solid black;
+}
+.edit_class .layui-layer-content .layui-input-inline{
+    width: 100px;
+}
+.edit_class .layui-layer-content .layui-form-label{
+    padding: 5px 10px;
 }
