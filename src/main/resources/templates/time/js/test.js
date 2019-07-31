@@ -74,43 +74,45 @@ jQuery(document).ready(function () {
                 {
                     "filmTitle": "哪吒",
                     "filmTime": "120",
-                    "startTime": "2019-07-30 11:15"
+                    "startTime": "2019-07-31 11:15"
                 },
                 {
                     "hallId": "1",
                     "filmTitle": "复仇者联盟:4",
                     "filmTime": "180",
-                    "startTime": "2019-07-30 18:00"
+                    "startTime": "2019-07-31 18:00"
                 }
             ],
             "2": [
                 {
                     "filmTitle": "哪吒",
                     "filmTime": "120",
-                    "startTime": "2019-07-30 13:15"
+                    "startTime": "2019-07-31 13:15"
                 },
                 {
                     "filmTitle": "哪吒",
                     "filmTime": "120",
-                    "startTime": "2019-07-30 20:30"
+                    "startTime": "2019-07-31 20:30"
                 }
             ],
             "4": [
                 {
                     "filmTitle": "哪吒",
                     "filmTime": "120",
-                    "startTime": "2019-07-30 11:15"
+                    "startTime": "2019-07-31 11:15"
                 },
                 {
                     "filmTitle": "复仇者联盟:4",
                     "filmTime": "180",
-                    "startTime": "2019-07-31 01:30"
+                    "startTime": "2019-08-01 01:30"
                 }
             ]
         }
     ;
 
     var myDate = new Date();//获取系统当前时间
+    var nexeDate = new Date(myDate.getTime());
+    nexeDate.setDate(nexeDate.getDate() + 1);
     function hallAndScheduling(divClass, hall, scheduling) {
         /************渲染厅和排程内容：开始*************/
         var body = "";
@@ -129,9 +131,11 @@ jQuery(document).ready(function () {
                     time.setMinutes(0);
                     time.setSeconds(0);
                     time.setMilliseconds(0);
-                    let time2 = new Date(time.getTime());
-                    time2.setDate(time2.getDate() + 1);
+                    let time2 = new Date(nexeDate.getTime());
                     time2.setHours(8);
+                    time.setMinutes(0);
+                    time.setSeconds(0);
+                    time.setMilliseconds(0);
                     if (time.getTime() <= startTime.getTime() && startTime.getTime() <= time2.getTime()) {
                         let left = timeToPx(schList[j].startTime);
                         sch += '<div class="dataT" data-filmTitle="' + schList[j].filmTitle + '" data-time="' + schList[j].filmTime + '" data-startTime="' + schList[j].startTime +
@@ -367,7 +371,7 @@ jQuery(document).ready(function () {
         if (d == myDate.getDate()) {
             //当天
             return (H * 60) + m;
-        } else if (d > myDate.getDate()) {
+        } else if (d == nexeDate.getDate()) {
             //第二天
             H = H + 24;
             return (H * 60) + m;
@@ -544,8 +548,15 @@ jQuery(document).ready(function () {
                     $(".ul-context-menu").hide();
                 tar = ele;
             },
-            menu: [
-                { // 菜单项
+            menu: [// 菜单项
+                {
+                    text: "编辑排程",
+                    icon: "",
+                    callback: function () {
+                        edit($(tar));
+                    }
+                },
+                {
                     text: "删除排程",
                     icon: "",
                     callback: function () {
@@ -554,22 +565,15 @@ jQuery(document).ready(function () {
                         layer.confirm('确定要删除该排程吗？', {
                             btn: ['确定', '取消'] //按钮
                         }, function () {
+                            //TODO 去后台删除
                             $(tar).remove();
                             layer.msg('删除成功');
                         }, function () {
-
+                            //取消
                         });
-                    }
-                },
-                {
-                    text: "编辑排程",
-                    icon: "",
-                    callback: function () {
-                        edit($(tar));
                     }
                 }
             ]
-
         });
     }
     //保存排程设置的开始时间
@@ -585,7 +589,8 @@ jQuery(document).ready(function () {
             let oldChildren = that.children(".startTime").html();
             that.css("left",left).data("starttime",time).children(".startTime").html(time);
             if (collision(that)){
-
+                //成功保存
+                layer.msg("该排程开始时间已调整为：" + time);
             }else {
                 that.css("left",oldLeft).data("starttime",oldStarttime).children(".startTime").html(oldChildren);
                 layer.msg("该排程时间与已有排程时间冲突");
@@ -604,7 +609,7 @@ jQuery(document).ready(function () {
                 title:that.data("filmtitle"),
                 type: 1,
                 skin: 'edit_class', //加上边框
-                area: ['420px', '440px'], //宽高
+                area: ['420px', '540px'], //宽高
                 content: '<div class="layui-form">\n' +
                     '  <div class="layui-form-item">\n' +
                     '      <label class="layui-form-label">开始日期：</label>\n' +
@@ -622,9 +627,57 @@ jQuery(document).ready(function () {
                     getTimeStrByDate(endTime) +
                     '</span></label>' +
                     '<button id="save" type="button" class="layui-btn layui-btn-warm layui-btn-radius" style="height: 30px;line-height: 30px">保存</button>' +
+                    '</div>' +
+                    '<div style="width: 100%;text-align: center;height: 40px;">' +
+                    '  <hr class="layui-bg-gray">' +
+                    '  播放列表' +
+                    '</div>' +
+                    '<div class="scrollbar-spl" style="background-color: #515151;width: 390px;height: 351px;">' +
+                    '<div class="layui-collapse" style="height: 351px;width: 100%">\n' +
+                    '  <div class="layui-colla-item">\n' +
+                    '    <h2 class="layui-colla-title">00:00'+ ' ' +'抖音-2019-07-31</h2>\n' +
+                    '    <div class="layui-colla-content">' +
+                    '      <span>00:05' + ' ' +'openLamp</span>' +
+                    '      <span>00:06' + ' ' +'dvi-A</span>' +
+                    '    </div>\n' +
+                    '  </div>\n' +
+                    '  <div class="layui-colla-item">\n' +
+                    '    <h2 class="layui-colla-title">01:00'+ ' ' +'广告名称</h2>\n' +
+                    '    <div class="layui-colla-content">内容区域</div>\n' +
+                    '  </div>\n' +
+                    '  <div class="layui-colla-item">\n' +
+                    '    <h2 class="layui-colla-title">01:00'+ ' ' +'广告名称</h2>\n' +
+                    '    <div class="layui-colla-content">内容区域</div>\n' +
+                    '  </div>\n' +
+                    '  <div class="layui-colla-item">\n' +
+                    '    <h2 class="layui-colla-title">02:00'+ ' ' +'广告名称</h2>\n' +
+                    '    <div class="layui-colla-content">内容区域</div>\n' +
+                    '  </div>\n' +
+                    '  <div class="layui-colla-item">\n' +
+                    '    <h2 class="layui-colla-title">03:00'+ ' ' +'广告名称</h2>\n' +
+                    '    <div class="layui-colla-content">内容区域</div>\n' +
+                    '  </div>\n' +
+                    '  <div class="layui-colla-item">\n' +
+                    '    <h2 class="layui-colla-title">04:00'+ ' ' +'广告名称</h2>\n' +
+                    '    <div class="layui-colla-content">内容区域</div>\n' +
+                    '  </div>\n' +
+                    '  <div class="layui-colla-item">\n' +
+                    '    <h2 class="layui-colla-title">05:00'+ ' ' +'广告名称</h2>\n' +
+                    '    <div class="layui-colla-content">内容区域</div>\n' +
+                    '  </div>\n' +
+                    '  <div class="layui-colla-item">\n' +
+                    '    <h2 class="layui-colla-title">06:00'+ ' ' +'正片名称</h2>\n' +
+                    '    <div class="layui-colla-content">内容区域</div>\n' +
+                    '  </div>\n' +
+                    '</div>' +
                     '</div>'
                 ,
                 success:function (layero, index) {
+                    layui.use(['element'], () => {
+                        var element = layui.element;
+                        element.init();
+                    });
+                    $('.scrollbar-spl').scrollbar();
                     $("#save").click(function () {
                         saveStartTime(that);
                     });

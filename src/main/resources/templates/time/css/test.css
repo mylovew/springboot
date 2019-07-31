@@ -357,7 +357,80 @@
 }
 .scrollbar-dynamic > .scroll-element.scroll-y.scroll-scrollx_visible .scroll-element_size { top: -12px; }
 
+/*************** SIMPLE SPL SCROLLBAR ***************/
 
+.scrollbar-spl > .scroll-element,
+.scrollbar-spl > .scroll-element div
+{
+    border: none;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    z-index: 10;
+}
+
+.scrollbar-spl > .scroll-element div {
+    display: block;
+    height: 100%;
+    left: 0;
+    top: 0;
+    width: 100%;
+}
+
+.scrollbar-spl > .scroll-element.scroll-x {
+    bottom: 2px;
+    height: 8px;
+    left: 0;
+    width: 100%;
+}
+
+.scrollbar-spl > .scroll-element.scroll-y {
+    height: 100%;
+    right: 2px;
+    top: 0;
+    width: 8px;
+}
+
+.scrollbar-spl > .scroll-element .scroll-element_outer {
+    overflow: hidden;
+}
+
+.scrollbar-spl > .scroll-element .scroll-element_outer,
+.scrollbar-spl > .scroll-element .scroll-element_track,
+.scrollbar-spl > .scroll-element .scroll-bar {
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+}
+
+.scrollbar-spl > .scroll-element .scroll-element_track,
+.scrollbar-spl > .scroll-element .scroll-bar {
+    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=40)";
+    filter: alpha(opacity=40);
+    opacity: 0.4;
+}
+
+.scrollbar-spl > .scroll-element .scroll-element_track { background-color: #e0e0e0; }
+.scrollbar-spl > .scroll-element .scroll-bar { background-color: #c2c2c2; }
+.scrollbar-spl > .scroll-element:hover .scroll-bar { background-color: #919191; }
+.scrollbar-spl > .scroll-element.scroll-draggable .scroll-bar { background-color: #919191; }
+
+/* scrollbar height/width & offset from container borders */
+
+.scrollbar-spl > .scroll-content.scroll-scrolly_visible { left: -12px; margin-left: 12px; }
+.scrollbar-spl > .scroll-content.scroll-scrollx_visible { top:  -12px; margin-top:  12px; }
+
+.scrollbar-spl > .scroll-element.scroll-x .scroll-bar { min-width: 10px; }
+.scrollbar-spl > .scroll-element.scroll-y .scroll-bar { min-height: 10px; }
+
+/* update scrollbar offset if both scrolls are visible */
+
+.scrollbar-spl > .scroll-element.scroll-x.scroll-scrolly_visible .scroll-element_track { left: -12px; }
+.scrollbar-spl > .scroll-element.scroll-y.scroll-scrollx_visible .scroll-element_track { top: -12px; }
+
+
+.scrollbar-spl > .scroll-element.scroll-x.scroll-scrolly_visible .scroll-element_size { left: -12px; }
+.scrollbar-spl > .scroll-element.scroll-y.scroll-scrollx_visible .scroll-element_size { top: -12px; }
 
 
 
@@ -365,12 +438,12 @@
 .edit_class .layui-layer-title{
     background-color: #7a7a7a;
     color: white;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid #515151;
 }
 .edit_class .layui-layer-content{
     background-color: #515151;
     color: white;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid #515151;
     padding-top: 10px;
     padding-bottom: 10px;
     font-size: 14px;
@@ -386,4 +459,29 @@
 }
 .edit_class .layui-layer-content .layui-form-label{
     padding: 5px 10px;
+}
+/*折叠*/
+.edit_class .layui-layer-content .layui-collapse{
+    border-style: none;
+    color: white;
+}
+.edit_class .layui-layer-content .layui-colla-item{
+    border-color: #1c1c1c;
+}
+.edit_class .layui-layer-content .layui-colla-title{
+    background-color: #3F3F3F;
+    color: white;
+
+}
+.edit_class .layui-layer-content .layui-colla-content{
+    background-color: #000000;
+    color: #dfdfdf;
+}
+.edit_class .layui-layer-content .layui-colla-content span{
+    background-color: #0e0e0e;
+    color: #dfdfdf;
+    border-bottom:1px solid #656d83;
+    line-height: 30px;
+    width: 100%;
+    display: block;
 }
