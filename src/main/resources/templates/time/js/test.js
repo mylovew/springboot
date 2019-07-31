@@ -72,12 +72,13 @@ jQuery(document).ready(function () {
     var schedulingJson = {
             "1": [
                 {
+                    "splId":"1",
                     "filmTitle": "哪吒",
                     "filmTime": "120",
                     "startTime": "2019-07-31 11:15"
                 },
                 {
-                    "hallId": "1",
+                    "splId": "2",
                     "filmTitle": "复仇者联盟:4",
                     "filmTime": "180",
                     "startTime": "2019-07-31 18:00"
@@ -85,11 +86,13 @@ jQuery(document).ready(function () {
             ],
             "2": [
                 {
+                    "splId": "1",
                     "filmTitle": "哪吒",
                     "filmTime": "120",
                     "startTime": "2019-07-31 13:15"
                 },
                 {
+                    "splId": "1",
                     "filmTitle": "哪吒",
                     "filmTime": "120",
                     "startTime": "2019-07-31 20:30"
@@ -97,11 +100,13 @@ jQuery(document).ready(function () {
             ],
             "4": [
                 {
+                    "splId": "1",
                     "filmTitle": "哪吒",
                     "filmTime": "120",
                     "startTime": "2019-07-31 11:15"
                 },
                 {
+                    "splId": "2",
                     "filmTitle": "复仇者联盟:4",
                     "filmTime": "180",
                     "startTime": "2019-08-01 01:30"
@@ -138,7 +143,7 @@ jQuery(document).ready(function () {
                     time.setMilliseconds(0);
                     if (time.getTime() <= startTime.getTime() && startTime.getTime() <= time2.getTime()) {
                         let left = timeToPx(schList[j].startTime);
-                        sch += '<div class="dataT" data-filmTitle="' + schList[j].filmTitle + '" data-time="' + schList[j].filmTime + '" data-startTime="' + schList[j].startTime +
+                        sch += '<div class="dataT" data-splId="'+ schList[j].splId + '" data-filmTitle="' + schList[j].filmTitle + '" data-time="' + schList[j].filmTime + '" data-startTime="' + schList[j].startTime +
                             '" style="position: absolute ;width: ' + schList[j].filmTime + 'px;height: 60px;left: ' + left +
                             'px;top: 0px;">' + schList[j].filmTitle + '<div class="startTime">' + schList[j].startTime + '</div></div>';
                     }
@@ -148,11 +153,11 @@ jQuery(document).ready(function () {
 
             if (i == 0) {
                 body += '<div id="hall' + hall[i].hallId + '" class="leftT leftTFirst">' + hall[i].hallName + '</div>\n';
-                rightBody += '<div id="hallScheduling' + hall[i].hallId + '" class="rightT rightTFirst">\n' + sch +
+                rightBody += '<div id="hallScheduling' + hall[i].hallId + '" data-hallId="' + hall[i].hallId + '" class="rightT rightTFirst">\n' + sch +
                     '                    </div>\n';
             } else {
                 body += '<div id="hall' + hall[i].hallId + '" class="leftT">' + hall[i].hallName + '</div>\n';
-                rightBody += '<div id="hallScheduling' + hall[i].hallId + '" class="rightT">\n' + sch +
+                rightBody += '<div id="hallScheduling' + hall[i].hallId + '" data-hallId="' + hall[i].hallId + '" class="rightT">\n' + sch +
                     '                    </div>\n';
             }
         }
@@ -775,5 +780,23 @@ jQuery(document).ready(function () {
             });
     }
 
-
 });
+/***********返回所有排程json************/
+function getAllSchJSON() {
+    var schJson = {};
+    $('.rightT').each(function () {
+        var sch = [];
+        $(this).children(".dataT").each(function () {
+            sch.push({
+                "splId": $(this).data("splid")+"",
+                "filmTitle": $(this).data("filmtitle"),
+                "filmTime": $(this).data("filmtime"),
+                "startTime": $(this).data("starttime")
+            })
+        })
+        if (sch.length > 0)
+            schJson[$(this).data("hallid")] = sch;
+    })
+    console.log(schJson);
+    // return schJson;
+}
