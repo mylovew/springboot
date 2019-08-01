@@ -1,4 +1,8 @@
-jQuery(document).ready(function () {
+var sDate = new Date();//服务时间
+var myDate = new Date();//获取系统当前时间
+var nexeDate = new Date(myDate.getTime());
+nexeDate.setDate(nexeDate.getDate() + 1);
+    var timeFlag = true;
     //$(".right").css("width",(800-135)+"px");
     var laydate =null;
     layui.use(['laydate','form','layer'], function(){
@@ -114,10 +118,98 @@ jQuery(document).ready(function () {
             ]
         }
     ;
+var schedulingJson1 = {
+        "1": [
+            {
+                "splId":"1",
+                "filmTitle": "哪吒",
+                "filmTime": "120",
+                "startTime": "2019-08-01 11:15"
+            },
+            {
+                "splId": "2",
+                "filmTitle": "复仇者联盟:4",
+                "filmTime": "180",
+                "startTime": "2019-08-01 18:00"
+            }
+        ],
+        "2": [
+            {
+                "splId": "1",
+                "filmTitle": "哪吒",
+                "filmTime": "120",
+                "startTime": "2019-08-01 13:15"
+            },
+            {
+                "splId": "1",
+                "filmTitle": "哪吒",
+                "filmTime": "120",
+                "startTime": "2019-08-01 20:30"
+            }
+        ],
+        "4": [
+            {
+                "splId": "1",
+                "filmTitle": "哪吒",
+                "filmTime": "120",
+                "startTime": "2019-08-01 11:15"
+            },
+            {
+                "splId": "2",
+                "filmTitle": "复仇者联盟:4",
+                "filmTime": "180",
+                "startTime": "2019-08-02 01:30"
+            }
+        ]
+    }
+;
+var schedulingJson2 = {
+        "1": [
+            {
+                "splId":"1",
+                "filmTitle": "哪吒",
+                "filmTime": "120",
+                "startTime": "2019-08-02 11:15"
+            },
+            {
+                "splId": "2",
+                "filmTitle": "复仇者联盟:4",
+                "filmTime": "180",
+                "startTime": "2019-08-02 18:00"
+            }
+        ],
+        "2": [
+            {
+                "splId": "1",
+                "filmTitle": "哪吒",
+                "filmTime": "120",
+                "startTime": "2019-08-02 13:15"
+            },
+            {
+                "splId": "1",
+                "filmTitle": "哪吒",
+                "filmTime": "120",
+                "startTime": "2019-08-02 20:30"
+            }
+        ],
+        "4": [
+            {
+                "splId": "1",
+                "filmTitle": "哪吒",
+                "filmTime": "120",
+                "startTime": "2019-08-02 11:15"
+            },
+            {
+                "splId": "2",
+                "filmTitle": "复仇者联盟:4",
+                "filmTime": "180",
+                "startTime": "2019-08-03 01:30"
+            }
+        ]
+    }
+;
 
-    var myDate = new Date();//获取系统当前时间
-    var nexeDate = new Date(myDate.getTime());
-    nexeDate.setDate(nexeDate.getDate() + 1);
+
     function hallAndScheduling(divClass, hall, scheduling) {
         /************渲染厅和排程内容：开始*************/
         var body = "";
@@ -125,39 +217,13 @@ jQuery(document).ready(function () {
             '            <div class="left">\n';
         var rightBody = "";
         for (i = 0; i < hall.length; i++) {
-            //排程内容
-            var sch = "";
-            var schList = scheduling[hall[i].hallId];
-            if (schList != null) {
-                for (j = 0; j < schList.length; j++) {
-                    let startTime = new Date(schList[j].startTime);
-                    let time = new Date(myDate.getTime());
-                    time.setHours(7);
-                    time.setMinutes(0);
-                    time.setSeconds(0);
-                    time.setMilliseconds(0);
-                    let time2 = new Date(nexeDate.getTime());
-                    time2.setHours(8);
-                    time.setMinutes(0);
-                    time.setSeconds(0);
-                    time.setMilliseconds(0);
-                    if (time.getTime() <= startTime.getTime() && startTime.getTime() <= time2.getTime()) {
-                        let left = timeToPx(schList[j].startTime);
-                        sch += '<div class="dataT" data-splId="'+ schList[j].splId + '" data-filmTitle="' + schList[j].filmTitle + '" data-time="' + schList[j].filmTime + '" data-startTime="' + schList[j].startTime +
-                            '" style="position: absolute ;width: ' + schList[j].filmTime + 'px;height: 60px;left: ' + left +
-                            'px;top: 0px;">' + schList[j].filmTitle + '<div class="startTime">' + schList[j].startTime + '</div></div>';
-                    }
-
-                }
-            }
-
             if (i == 0) {
                 body += '<div id="hall' + hall[i].hallId + '" class="leftT leftTFirst">' + hall[i].hallName + '</div>\n';
-                rightBody += '<div id="hallScheduling' + hall[i].hallId + '" data-hallId="' + hall[i].hallId + '" class="rightT rightTFirst">\n' + sch +
+                rightBody += '<div id="hallScheduling' + hall[i].hallId + '" data-hallId="' + hall[i].hallId + '" class="rightT rightTFirst">\n'+
                     '                    </div>\n';
             } else {
                 body += '<div id="hall' + hall[i].hallId + '" class="leftT">' + hall[i].hallName + '</div>\n';
-                rightBody += '<div id="hallScheduling' + hall[i].hallId + '" data-hallId="' + hall[i].hallId + '" class="rightT">\n' + sch +
+                rightBody += '<div id="hallScheduling' + hall[i].hallId + '" data-hallId="' + hall[i].hallId + '" class="rightT">\n'+
                     '                    </div>\n';
             }
         }
@@ -194,89 +260,15 @@ jQuery(document).ready(function () {
         }
         $('.time').html(timeBody);
         /*******渲染刻度 结束**********/
-        //渲染draggable
-        $(".rightT .dataT").each(function () {
-            $(this).draggable({
-                containment: [$(this).offset().left + parseInt($('.timeLine').css("left")) + 1, $(this).offset().top, $(this).offset().left + $(this).width(), $(this).offset().top],
-                scroll: false,
-                zIndex:10,
-                create: function (event, ui) {
-                    rightMenu($(this));
-                },
-                start: function (event, ui) {
-                    revertLift = ui.position.left;
-                },
-                revert: function () {
-                    if (parseInt($('.timeLine').css("left")) < parseInt($(this).css("left"))) {
-                        //跟现有排程有时间冲突
-                        if (collision($(this))){
-                            //不作处理
-                            return false;
-                        } else {
-                            const left = revertLift;
-                            if (left >= 0) {
-                                //pxToTime(left,this);
-                                $(this).children(".startTime").html(pxToTime(left));
-                            }
-                            layer.msg("该排程时间与已有排程时间冲突");
-                            return true;
-                        }
-                    } else {
-                        const left = revertLift;
-                        if (left >= 0) {
-                            //pxToTime(left,this);
-                            $(this).children(".startTime").html(pxToTime(left));
-                        }
-                        layer.msg("排程应晚于当前时间2分钟以上");
-                        return true;
-                    }
 
-                },
-                drag: function (event, ui) {
-                    const left = ui.offset.left - $('.rightT').offset().left;
-                    if (left >= 0) {
-                        let time = pxToTime(left);
-                        $(ui.helper).children(".startTime").html(time);
-                        $(ui.helper).data("starttime", time);
-                    }
-
-                }
-            })
-        })
         //初始化时间线高度
         $('.timeLine').height($('.right').height() - 35);
         //初始化时间线位置
-        //获取服务器时间
-        timeNum = 7; //从7点开始
 
-        var hours = myDate.getHours();
-        if (hours < 7) {
-            hours += 24;
-        }
-        var minutes = myDate.getMinutes();
-        $('.timeLine').css("left", (hours - timeNum) * 60 + minutes);
+        schBody(scheduling,myDate.getFullYear()+"-"+ (myDate.getMonth()+1) + "-" + myDate.getDate());
 
-        function timeLine() {
-            //只走到第二天7点
-            if (parseInt($('.timeLine').css("left")) < (24 * 60)) {
-                //一分钟执行一次
-                setTimeout(timeLine, 1000 * 60);
-            }
-            myDate.setMinutes(myDate.getMinutes() + 1);
-            //偏移
-            $('.timeLine').css("left", parseInt($('.timeLine').css("left")) + 1);
-            //偏移量
-            RefreshContainment();
-            //移除压线的draggable拖动效果
-            $(".rightT .dataT").each(function () {
-                if (parseInt($(this).css("left")) <= parseInt($('.timeLine').css("left")) + 1) {
-                    $(this).draggable("disable").addClass("dataTDisable");
-                    $(this).data("menu", "hide");
-                }
-            })
-        }
 
-        timeLine();
+
         /************渲染厅和排程内容：结束*************/
         /*********滚动条**********/
         jQuery('.scrollbar-dynamic').scrollbar({
@@ -311,12 +303,30 @@ jQuery(document).ready(function () {
 
     }
 
-    hallAndScheduling("timeBody", hallJson, schedulingJson);
+    hallAndScheduling("timeBody", hallJson, schedulingJson1);
 
-    function body(hallNumber) {
-
+    //时间指针动力
+    function timeLine() {
+        if (timeFlag){
+            //只走到第二天7点
+            if (parseInt($('.timeLine').css("left")) < (24 * 60)) {
+                //一分钟执行一次
+                setTimeout(timeLine, 1000 * 60);
+            }
+            myDate.setMinutes(myDate.getMinutes() + 1);
+            //偏移
+            $('.timeLine').css("left", parseInt($('.timeLine').css("left")) + 1);
+            //偏移量
+            RefreshContainment();
+            //移除压线的draggable拖动效果
+            $(".rightT .dataT").each(function () {
+                if (parseInt($(this).css("left")) <= parseInt($('.timeLine').css("left")) + 1) {
+                    $(this).draggable("disable").addClass("dataTDisable");
+                    $(this).data("menu", "hide");
+                }
+            })
+        }
     }
-
     //更新偏移量
     function RefreshContainment() {
         $(".rightT .dataT").each(function () {
@@ -375,7 +385,7 @@ jQuery(document).ready(function () {
         if (d == myDate.getDate()) {
             //当天
             return (H * 60) + m;
-        } else if (d == nexeDate.getDate()) {
+        } else if (d == nextMyDate.getDate()) {
             //第二天
             H = H + 24;
             return (H * 60) + m;
@@ -779,7 +789,20 @@ jQuery(document).ready(function () {
             });
     }
 
+$("#getAllSchJSON").click(function () {
+    getAllSchJSON()
 });
+$("#qian").click(function () {
+    schBody(schedulingJson,"2019-07-31")
+});
+$("#now").click(function () {
+    schBody(schedulingJson1,"2019-08-01")
+});
+$("#ming").click(function () {
+    schBody(schedulingJson2,"2019-08-02")
+});
+
+
 /***********返回所有排程json************/
 function getAllSchJSON() {
     var schJson = {};
@@ -789,7 +812,7 @@ function getAllSchJSON() {
             sch.push({
                 "splId": $(this).data("splid")+"",
                 "filmTitle": $(this).data("filmtitle"),
-                "filmTime": $(this).data("filmtime"),
+                "filmTime": $(this).data("time"),
                 "startTime": $(this).data("starttime")
             })
         })
@@ -798,4 +821,118 @@ function getAllSchJSON() {
     })
     console.log(schJson);
     // return schJson;
+}
+
+//初始化排程信息
+function schBody(schJson,date) {
+    myDate = new Date(date);
+    myDate.setHours(0);
+    nextMyDate = new Date(date);
+    nextMyDate.setDate(nextMyDate.getDate()+1);
+    $(".rightT").html("");
+    for (var hallId in schJson){
+        //排程内容
+        var schList = schJson[hallId];
+        if (schList != null) {
+            for (j = 0; j < schList.length; j++) {
+                let startTime = new Date(schList[j].startTime);
+                let time = new Date(myDate.getTime());
+                time.setHours(7);
+                time.setMinutes(0);
+                time.setSeconds(0);
+                time.setMilliseconds(0);
+                let time2 = new Date(nextMyDate.getTime());
+                time2.setHours(8);
+                time2.setMinutes(0);
+                time2.setSeconds(0);
+                time2.setMilliseconds(0);
+                if (time.getTime() <= startTime.getTime() && startTime.getTime() <= time2.getTime()) {
+                    let left = timeToPx(schList[j].startTime);
+                    $('#hallScheduling'+parseInt(hallId)).append('<div class="dataT" data-splId="'+ schList[j].splId + '" data-filmTitle="' + schList[j].filmTitle + '" data-time="' + schList[j].filmTime + '" data-startTime="' + schList[j].startTime +
+                        '" style="position: absolute ;width: ' + schList[j].filmTime + 'px;height: 60px;left: ' + left +
+                        'px;top: 0px;">' + schList[j].filmTitle + '<div class="startTime">' + schList[j].startTime + '</div></div>');
+                }
+            }
+        }
+    }
+    //渲染draggable
+    $(".rightT .dataT").each(function () {
+        $(this).draggable({
+            containment: [$(this).offset().left + parseInt($('.timeLine').css("left")) + 1, $(this).offset().top, $(this).offset().left + $(this).width(), $(this).offset().top],
+            scroll: false,
+            zIndex:10,
+            create: function (event, ui) {
+                rightMenu($(this));
+            },
+            start: function (event, ui) {
+                revertLift = ui.position.left;
+            },
+            revert: function () {
+                if (parseInt($('.timeLine').css("left")) < parseInt($(this).css("left"))) {
+                    //跟现有排程有时间冲突
+                    if (collision($(this))){
+                        //不作处理
+                        return false;
+                    } else {
+                        const left = revertLift;
+                        if (left >= 0) {
+                            //pxToTime(left,this);
+                            $(this).children(".startTime").html(pxToTime(left));
+                        }
+                        layer.msg("该排程时间与已有排程时间冲突");
+                        return true;
+                    }
+                } else {
+                    const left = revertLift;
+                    if (left >= 0) {
+                        //pxToTime(left,this);
+                        $(this).children(".startTime").html(pxToTime(left));
+                    }
+                    layer.msg("排程应晚于当前时间2分钟以上");
+                    return true;
+                }
+
+            },
+            drag: function (event, ui) {
+                const left = ui.offset.left - $('.rightT').offset().left;
+                if (left >= 0) {
+                    let time = pxToTime(left);
+                    $(ui.helper).children(".startTime").html(time);
+                    $(ui.helper).data("starttime", time);
+                }
+
+            }
+        })
+    })
+    //判断日期是否是当日
+    let serverDate = new Date(sDate.getFullYear()+'-'+(sDate.getMonth()+1)+'-'+sDate.getDate());
+    if (myDate.getTime() == serverDate.getTime()){
+        myDate = new Date(sDate.getTime());
+        timeFlag = true;
+        //获取服务器时间
+        let timeNum = 7; //从7点开始
+
+        let hours = myDate.getHours();
+        if (hours < 7) {
+            hours += 24;
+        }
+        let minutes = myDate.getMinutes();
+        $('.timeLine').css("left", (hours - timeNum) * 60 + minutes).css("opacity",1.0);
+        timeLine();
+    }else if (myDate.getTime() < serverDate.getTime()){
+        timeFlag = false;
+        $('.timeLine').css("left", 1500).css("opacity",0.0);
+        $(".rightT .dataT").each(function () {
+            $(this).draggable("disable").addClass("dataTDisable");
+            $(this).data("menu", "hide");
+        })
+        //偏移量
+        RefreshContainment();
+    }else if (myDate.getTime() > serverDate.getTime()){
+        timeFlag = false;
+        $('.timeLine').css("left", -1).css("opacity",0.0);
+        //偏移量
+        RefreshContainment();
+    }
+
 }

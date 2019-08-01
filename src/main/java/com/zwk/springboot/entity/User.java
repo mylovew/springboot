@@ -2,11 +2,10 @@ package com.zwk.springboot.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 /**
  * @program: springboot
@@ -17,6 +16,7 @@ import javax.persistence.Id;
 @Entity
 @Getter
 @Setter
+@ToString
 public class User {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
@@ -24,4 +24,8 @@ public class User {
     private String name;
     private String password;
     private String phone;
+    private Integer state;
+    @ManyToMany(fetch= FetchType.EAGER)
+    @JoinTable(name = "user_role",joinColumns = {@JoinColumn(name = "user_id")},inverseJoinColumns = {@JoinColumn(name = "role_id")})
+    private List<Role> roleList;
 }
