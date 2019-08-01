@@ -25,6 +25,14 @@ public class UserController {
     @RequestMapping("findAll")
     public List<User> findAll(){
         log.info("findAll");
-        return userService.findAll();
+        List<User> userList = userService.findAll();
+        System.out.println(userList.get(0).getName());
+        System.out.println(userList.get(0).getRoleList());
+        return null;
+    }
+
+    @RequestMapping("findByName")
+    public User findByName(){
+        return userService.findByName("admin");
     }
 }
