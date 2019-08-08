@@ -9,6 +9,7 @@
     height: 60px;
     background-color: #00FF00;
     margin-top: 5px;
+    white-space: nowrap
 }
 
 
@@ -54,9 +55,12 @@
     position: relative;
 }
 .body .right .rightBody .rightT .dataT{
-    color: #111111;
+    color: #000000;
     background-color: #00F7DE;
     z-index: 10;
+    white-space: nowrap;
+    text-overflow:ellipsis;
+    overflow:hidden;
 }
 .body .right .rightBody .rightT .dataTDisable{
     background-color: #08d1ff;

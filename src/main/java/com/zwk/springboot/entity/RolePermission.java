@@ -18,7 +18,7 @@ import java.util.Objects;
 @Table(name = "role_permission", schema = "springboot", catalog = "")
 public class RolePermission {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int rolePermissionId;
     private Integer roleId;
     private Integer permissionId;

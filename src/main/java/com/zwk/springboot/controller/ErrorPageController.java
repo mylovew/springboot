@@ -20,4 +20,8 @@ public class ErrorPageController {
     public String error_404(){
         return "/error/404";
     }
+    @RequestMapping("403")
+    public String error_403(){
+        return "/error/403";
+    }
 }

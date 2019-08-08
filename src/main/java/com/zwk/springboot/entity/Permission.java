@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,7 +19,8 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
-public class Permission {
+public class Permission implements Serializable {
+    private static final long serialVersionUID = -6224365265495825638L;
     @Id
     private String permissionId;
     private String permissionName;
@@ -26,4 +28,16 @@ public class Permission {
     private String url;
     private String permission;
     private String parentId;
+
+    @Override
+    public String toString() {
+        return "Permission{" +
+                "permissionId='" + permissionId + '\'' +
+                ", permissionName='" + permissionName + '\'' +
+                ", resourceType='" + resourceType + '\'' +
+                ", url='" + url + '\'' +
+                ", permission='" + permission + '\'' +
+                ", parentId='" + parentId + '\'' +
+                '}';
+    }
 }

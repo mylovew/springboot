@@ -1,5 +1,7 @@
 package com.zwk.springboot.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.server.ErrorPage;
 import org.springframework.boot.web.server.ErrorPageRegistrar;
 import org.springframework.boot.web.server.ErrorPageRegistry;
@@ -14,7 +16,6 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class ErrorController implements ErrorPageRegistrar {
-
     @Override
     public void registerErrorPages(ErrorPageRegistry registry) {
         /*1、按错误的类型显示错误的网页*/
@@ -23,6 +24,5 @@ public class ErrorController implements ErrorPageRegistrar {
         //错误类型为500，表示服务器响应错误，默认显示500.html网页
         ErrorPage e500 = new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/error/500");
         registry.addErrorPages(e404, e500);
-
     }
 }

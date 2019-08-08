@@ -18,7 +18,7 @@ import java.util.Objects;
 @Table(name = "user_role", schema = "springboot")
 public class UserRole {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int userRoleId;
     private Integer userId;
     private Integer roleId;

@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,9 +19,10 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
-public class Role {
+public class Role implements Serializable {
+    private static final long serialVersionUID = -16939265717116877L;
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int roleId;
     private String role;
     private String description;
@@ -28,4 +30,13 @@ public class Role {
     @JoinTable(name = "role_permission", joinColumns = {@JoinColumn(name = "role_id")},inverseJoinColumns = {@JoinColumn(name = "permission_id")})
     private List<Permission> permissionList;
 
+    @Override
+    public String toString() {
+        return "Role{" +
+                "roleId=" + roleId +
+                ", role='" + role + '\'' +
+                ", description='" + description + '\'' +
+                ", permissionList=" + permissionList +
+                '}';
+    }
 }
