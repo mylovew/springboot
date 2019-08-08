@@ -61,7 +61,6 @@ public class MyShiroRealm extends AuthorizingRealm {
         if(user == null){
             return null;
         }
-        System.out.println("----->>user="+user.toString());
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
                 user, //这里传入的是user对象，比对的是用户名，直接传入用户名也没错，但是在授权部分就需要自己重新从数据库里取权限
                 user.getPassword(), //密码

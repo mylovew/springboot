@@ -42,9 +42,7 @@ public class UserController {
     @RequestMapping("userList")
     public String userList(Map<String,Object> map){
         log.info("去userList页面");
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
-        //权限菜单
-        map.put("menu",user.getRoleList().get(0).getPermissionList());
+
         return "/admin/userList";
     }
     @RequiresPermissions(value = "user:userList")

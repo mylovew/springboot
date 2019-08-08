@@ -28,7 +28,7 @@ public class Permission implements Serializable {
     private String url;
     private String permission;
     private String parentId;
-
+    private String icon;
     @Override
     public String toString() {
         return "Permission{" +
