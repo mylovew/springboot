@@ -29,6 +29,9 @@ public class Permission implements Serializable {
     private String permission;
     private String parentId;
     private String icon;
+    @Transient
+    private List<Permission> childList = null;
+
     @Override
     public String toString() {
         return "Permission{" +
@@ -38,6 +41,8 @@ public class Permission implements Serializable {
                 ", url='" + url + '\'' +
                 ", permission='" + permission + '\'' +
                 ", parentId='" + parentId + '\'' +
+                ", icon='" + icon + '\'' +
+                ", childList=" + childList +
                 '}';
     }
 }

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="/admin/template.html::common"></th:block>
+</head>
+<body>
+    <!--顶部-->
+    <div style="height: 40px;line-height: 40px;padding-left: 30px; background-color: white">
+        <span class="layui-breadcrumb">
+          <a href="">首页</a>
+          <a><cite>菜单列表</cite></a>
+        </span>
+    </div>
+    <!--权限菜单内容-->
+    <div id="menuList">
+
+    </div>
+</body>
+<script>
+    layui.use(['tree','element'], function(){
+        var tree = layui.tree;
+
+        //渲染
+        var inst1 = tree.render({
+            elem: '#menuList'  //绑定元素
+            ,showLine:false  //连接线关闭
+            ,data: [{
+                title: '江西' //一级菜单
+                ,id:'100'
+                ,children: [{
+                    title: '南昌' //二级菜单
+                    ,children: [{
+                        title: '高新区' //三级菜单
+                        //…… //以此类推，可无限层级
+                    }]
+                }]
+            },{
+                title: '陕西' //一级菜单
+                ,children: [{
+                    title: '西安' //二级菜单
+                }]
+            }]
+        });
+    });
+</script>
+</html>

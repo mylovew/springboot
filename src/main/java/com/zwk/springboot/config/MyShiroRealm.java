@@ -38,12 +38,11 @@ public class MyShiroRealm extends AuthorizingRealm {
         for(Role role:user.getRoleList()){
             authorizationInfo.addRole(role.getRole());
             for(Permission p:role.getPermissionList()){
-                if (null != p.getPermission() && !"".equals(p.getPermission()))
+                if (!p.getResourceType().equals("menu"))
                 authorizationInfo.addStringPermission(p.getPermission());
 //                authorizationInfo.addStringPermission(p.getUrl());
             }
         }
-        System.out.println(authorizationInfo);
         return authorizationInfo;
     }
 

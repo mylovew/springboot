@@ -26,7 +26,7 @@ public class HomeController {
     @Resource
     private LoginService loginService;
     @RequestMapping("/login")
-    public String login(){
+    public String login(Map<String, Object> map){
         return "/admin/login";
     }
     @RequestMapping(value = "/login",method = RequestMethod.POST)
@@ -38,6 +38,9 @@ public class HomeController {
         LoginResult loginResult = loginService.login(userName,password);
         map.put("state",loginResult.isLogin());
         map.put("msg",loginResult.getResult());
+        if (loginResult.isLogin()){
+            return "redirect:index/toIndex";
+        }
         return "/admin/login";
     }
 //    @RequestMapping("/logout")

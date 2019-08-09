@@ -10,8 +10,9 @@
         <link rel="stylesheet" href="/static/css/font.css">
         <link rel="stylesheet" href="/static/css/xadmin.css">
         <link rel="stylesheet" href="/static/css/theme969.css">
-        <script src="/static/lib/layui/layui.js" charset="utf-8"></script>
+        <script type="text/javascript" src="/static/lib/layui/layui.js"></script>
         <script type="text/javascript" src="/static/js/xadmin.js"></script>
+
         <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
         <!--[if lt IE 9]-->
 <!--          <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>-->
@@ -21,6 +22,7 @@
             // 是否开启刷新记忆tab功能
             // var is_remember = false;
         </script>
+
     </head>
     <body class="index">
         <!-- 顶部开始 -->
@@ -42,7 +44,8 @@
                     </dl>
                 </li>
                 <li class="layui-nav-item to-index">
-                    <a href="/">前台首页</a></li>
+                    <a href="#">前台首页</a>
+                </li>
             </ul>
         </div>
         <!-- 顶部结束 -->
@@ -52,23 +55,41 @@
             <div id="side-nav">
                 <ul id="nav" th:each="menu : ${menuList}">
                     <li>
-                        <a  th:href="${menu['oneMenu'].url =='' || menu['oneMenu'].url ==null}?'javascript:;':${menu['oneMenu'].url}">
-                            <i th:class="'layui-icon '+${menu['oneMenu'].icon}" th:attr="lay-tips=${menu['oneMenu'].permissionName}" ></i>
-                            <cite th:text="${menu['oneMenu'].permissionName}"></cite>
-                            <i class="iconfont nav_right" th:if="${menu['twoMenu']!= null}">&#xe697;</i>
+                        <a  th:onclick="open_page([[${menu.url}]])">
+                            <i th:class="'layui-icon '+${menu.icon}" th:attr="lay-tips=${menu.permissionName}" ></i>
+                            <cite th:text="${menu.permissionName}"></cite>
+                            <th:block th:if="${menu.url =='' || menu.url == null}">
+                                <i class="iconfont nav_right" th:unless="${#lists.isEmpty(menu.childList)}">&#xe697;</i>
+                            </th:block>
+
                         </a>
-
-
-                        <ul th:if="${menu['twoMenu']!= null}" class="sub-menu" th:each="twoMenu : ${menu['twoMenu']}">
-                            <li>
-                                <a th:onclick="open_page([[${twoMenu.url}]])">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite th:text="${twoMenu.permissionName}"></cite></a>
-                            </li>
-                        </ul>
-
+                        <th:block th:if="${menu.url =='' || menu.url == null}">
+                            <th:block th:unless="${#lists.isEmpty(menu.childList)}" th:include="this::row(${menu.childList})"></th:block>
+                        </th:block>
 
                     </li>
+
+                    <!-- 局部模板-->
+                    <th:block th:fragment="row(permissions)">
+                        <th:block th:each="m : ${permissions}">
+                            <ul class="sub-menu">
+                                <li>
+                                    <a  th:onclick="open_page([[${m.url}]])">
+                                        <i th:class="'layui-icon '+${m.icon}" th:attr="lay-tips=${m.permissionName}" ></i>
+                                        <cite th:text="${m.permissionName}"></cite>
+                                        <th:block th:if="${m.url =='' || m.url == null}">
+                                            <i class="iconfont nav_right" th:unless="${#lists.isEmpty(menu.childList)}">&#xe697;</i>
+                                        </th:block>
+                                    </a>
+                                    <th:block th:if="${m.url =='' || m.url == null}">
+                                        <th:block th:unless="${#lists.isEmpty(menu.childList)}" th:include="this::row(${m.childList})"></th:block>
+                                    </th:block>
+
+                                </li>
+                            </ul>
+                        </th:block>
+                    </th:block>
+
                 </ul>
             </div>
         </div>
@@ -90,7 +111,10 @@
         <!-- 中部结束 -->
         <script>
             var open_page = function (url) {
-                $('.x-iframe').attr("src",url);
+                if(url == null || url == ''){
+                    return;
+                }else
+                    $('.x-iframe').attr("src",url);
             }
         </script>
     </body>

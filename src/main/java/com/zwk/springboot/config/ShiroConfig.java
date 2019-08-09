@@ -40,6 +40,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/static/js/**", "anon");
         filterChainDefinitionMap.put("/static/images/**", "anon");
         filterChainDefinitionMap.put("/static/lib/layui/**", "anon");
+        filterChainDefinitionMap.put("/static/lib/layui/css/**", "anon");
         filterChainDefinitionMap.put("/login", "anon");
         //配置退出 过滤器,其中的具体的退出代码Shiro已经替我们实现了
         filterChainDefinitionMap.put("/logout", "logout");
