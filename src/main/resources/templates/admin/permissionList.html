@@ -1,7 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
+
     <th:block th:replace="/admin/template.html::common"></th:block>
+<!--    <link rel="stylesheet" href="/static/css/contextMenu.css" >-->
+<!--    <script src="/static/js/jquery.contextMenu.min.js"></script>-->
+    <style>
+        .hide {
+            display: none;
+        }
+    </style>
 </head>
 <body>
     <!--顶部-->
@@ -11,36 +19,372 @@
           <a><cite>菜单列表</cite></a>
         </span>
     </div>
-    <!--权限菜单内容-->
-    <div id="menuList">
-
+    <div class="layui-btn-container" style="padding: 10px 0px 0px 10px">
+        <button class="layui-btn layui-btn-normal" id="addMenu">添加顶级菜单</button>
+        <button class="layui-btn layui-btn-warm" id="openAll">展开或折叠全部</button>
     </div>
-</body>
-<script>
-    layui.use(['tree','element'], function(){
-        var tree = layui.tree;
+    <!--权限菜单内容-->
+    <div style="width: 100%;">
+        <table class="layui-hidden" id="treeTable" lay-filter="treeTable" ></table>
+    </div>
 
-        //渲染
-        var inst1 = tree.render({
-            elem: '#menuList'  //绑定元素
-            ,showLine:false  //连接线关闭
-            ,data: [{
-                title: '江西' //一级菜单
-                ,id:'100'
-                ,children: [{
-                    title: '南昌' //二级菜单
-                    ,children: [{
-                        title: '高新区' //三级菜单
-                        //…… //以此类推，可无限层级
-                    }]
-                }]
-            },{
-                title: '陕西' //一级菜单
-                ,children: [{
-                    title: '西安' //二级菜单
-                }]
-            }]
+</body>
+<script th:inline="javascript">
+    var treeGrid,form,iconPicker,treeSelect,$;
+    layui.config({
+        base: '/static/lib/layui/extend/'
+    }).extend({
+        treeGrid:'treeGrid',
+        iconPicker:'iconPicker',
+        treeSelect:'treeSelect'
+    }).use(['tree','treeGrid','jquery','element','form','iconPicker','treeSelect'], function(){
+        $ = layui.jquery;
+        iconPicker = layui.iconPicker;
+        form = layui.form;
+        treeGrid = layui.treeGrid;//很重要
+        treeSelect = layui.treeSelect;
+        var ptable=treeGrid.render({
+            id:'treeTable'
+            ,elem: '#treeTable'
+            ,idField:'permissionId'
+            ,url:'/permission/permissionListPage'
+            ,method:'post'
+            ,cellMinWidth: 100
+            ,treeId:'permissionId'//树形id字段名称
+            ,treeUpId:'parentId'//树形父id字段名称
+            ,treeShowName:'permissionName'//以树形式显示的字段
+            ,iconOpen:false//是否显示图标【默认显示】
+            ,isOpenDefault:false//节点默认是展开还是折叠【默认展开】
+            ,cols: [[
+                {field:'permissionName',width:300, title: '权限名称'}
+                ,{field:'permissionId',width:100, title: '权限ID'}
+                ,{field:'icon',width:100,align:'center', title: '权限图标',
+                    templet:function (d) {
+                        return '<i class="layui-icon '+d.icon+'"></i>'
+                    }
+                }
+                ,{field:'resourceType',width:100,align:'center', title: '类型'}
+                ,{field:'url',width:300, title: '权限路径'}
+                ,{field:'permission',width:300, title: '所属权限'}
+                ,{width:120,title: '操作', align:'center'
+                    ,templet: function(d){
+                    var html='',addBtn='';
+                    // addBtn='<a class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs" style="height: 25px;line-height: 26px" lay-event="add">添加子权限</a>';
+                    var updBtn='<a class="layui-btn layui-btn-radius layui-btn-warm layui-btn-xs" style="height: 25px;line-height: 26px;width: 40px;" lay-event="upd">修改</a>';
+                    var delBtn='<a class="layui-btn layui-btn-radius layui-btn-danger layui-btn-xs" style="height: 25px;line-height: 26px;width: 40px;" lay-event="del">删除</a>';
+                    //类型为按钮不允许添加子菜单
+                    // if (d.resourceType=='button'){
+                    //     addBtn = '';
+                    // }
+                    return addBtn+updBtn+delBtn;
+                    }
+                }
+            ]]
+            ,page:false
         });
+
+        treeGrid.on('tool(treeTable)',function (obj) {
+            if(obj.event === 'del'){//删除行
+                del(obj);
+                console.log(obj)
+            }else if(obj.event==="upd"){//修改行
+                const pobj = obj.data;
+                console.log(pobj)
+                // const p = {};
+                // p.permissionId = pobj.permissionId;
+                // p.parentId = pobj.parentId ;
+                // p.icon = pobj.icon;
+                // p.permissionName = pobj.permissionName;
+                // p.permission = pobj.permission;
+                // p.url = pobj.url;
+                // p.resourceType = pobj.resourceType;
+                addEditOPen(pobj,'upd');
+            }else if(obj.event==="add"){//添加行
+                console.log(obj.data)
+                add(obj.data);
+            }
+        });
+        //
+        $('#openAll').on('click',function () {
+            openAll()
+        });
+        $('#addMenu').on('click',function () {
+            const p = {};
+            p.parentId = '0';
+            addEditOPen(p,'add');
+        });
+
     });
+    function del(obj) {
+        layer.confirm("你确定删除该权限吗？<br>如果存在下级节点则一并删除，<br>此操作不能撤销！", {icon: 3, title:'提示'},
+            function(index){//确定回调
+                //去删除
+                $.ajax({
+                    url:'/permission/del',
+                    async:false,
+                    type:'post',
+                    dataType:'json',
+                    data:{permissionId:obj.data.permissionId},
+                    success:function (d) {
+                        if (d.status){
+                            obj.del();
+                            layer.close(index);
+                            layer.msg(d.msg, {icon: 1});
+                        }else {
+                            layer.msg(d.msg, {icon: 2,anim: 6});
+                        }
+                    },
+                    error:function (data) {
+                        // console.log(data);
+                        layer.msg('服务器请求失败', {icon: 2,anim: 6});
+                    }
+                });
+
+            },function (index) {//取消回调
+                layer.close(index);
+            }
+        );
+    }
+
+
+    var i=1000;
+    //添加
+    function add(pObj) {
+        var param={};
+        param.permissionName='水果'+Math.random();
+        param.icon='';
+        param.resourceType='';
+        param.url='';
+        param.permission='';
+        param.permissionId='';
+        param.parentId=pObj?pObj.permissionId:0;
+        console.log(param)
+        treeGrid.addRow('treeTable',pObj?pObj[treeGrid.config.indexName]+1:0,param);
+    }
+    //打开或关闭折叠
+    function openAll() {
+        var treedata = treeGrid.getDataTreeList('treeTable');
+        treeGrid.treeOpenAll('treeTable',!treedata[0][treeGrid.config.cols.isOpen]);
+    }
+
+    function addEditOPen(p,type) {
+        layer.open({
+            title:type=='upd'?"修改权限菜单":p.parentId=='0'?'添加顶级权限菜单':'添加权限菜单',
+            type:1,
+            area: ['400px', '500px'], //宽高
+            content:'<div style="width: 330px;margin-top: 20px;">' +
+                '<form method="post" class="layui-form" lay-filter="permissionForm">\n' +
+                '  <div class="layui-form-item">\n' +
+                '    <label class="layui-form-label">权限类型</label>\n' +
+                '    <div class="layui-input-block">\n' +
+                '      <input type="radio" name="resourceType" lay-filter="resourceType" value="menu" title="menu" checked>\n' +
+                '      <input type="radio" name="resourceType" lay-filter="resourceType" value="button" title="button" >\n' +
+                '    </div>\n' +
+                '  </div>' +
+                '  <div class="layui-form-item">\n' +
+                '    <label class="layui-form-label">父级菜单</label>\n' +
+                '    <div class="layui-input-block">\n' +
+                '      <input type="text" name="parentId" id="parentId" value="0" lay-filter="parentId" class="layui-input">\n' +
+                '    </div>\n' +
+                '  </div>' +
+                '  <div class="layui-form-item">\n' +
+                '    <label class="layui-form-label">权限ID</label>\n' +
+                '    <div class="layui-input-block">\n' +
+                '      <input type="hidden" id="oldPermissionId" name="oldPermissionId" class="layui-input">\n' +
+                '      <input type="text" id="permissionId" name="permissionId" required lay-verify="required" autocomplete="off" placeholder="请输入权限ID" class="layui-input">\n' +
+                '    </div>\n' +
+                '  </div>' +
+                '  <div class="layui-form-item">\n' +
+                '    <label class="layui-form-label">权限名称</label>\n' +
+                '    <div class="layui-input-block">\n' +
+                '      <input type="text" id="permissionName" name="permissionName" required lay-verify="required" autocomplete="off" placeholder="请输入权限名称" class="layui-input">\n' +
+                '    </div>\n' +
+                '  </div>' +
+                '  <div class="layui-form-item">\n' +
+                '    <label class="layui-form-label">权限图标</label>\n' +
+                '    <div class="layui-input-block">\n' +
+                '      <input lay-filter="iconPicker" class="hide" id="iconPicker" lay-filter="iconPicker" name="icon" required lay-verify="required" value="layui-icon-face-smile">\n' +
+                '    </div>\n' +
+                '  </div>' +
+                '  <div class="layui-form-item">\n' +
+                '    <label class="layui-form-label">权限路径</label>\n' +
+                '    <div class="layui-input-block">\n' +
+                '      <input type="text" id="url" name="url" lay-filter="url" placeholder="请输入权限路径" class="layui-input">\n' +
+                '    </div>\n' +
+                '  </div>' +
+                '  <div class="layui-form-item">\n' +
+                '    <label class="layui-form-label">所属权限</label>\n' +
+                '    <div class="layui-input-block">\n' +
+                '      <input type="text" id="permission" name="permission" lay-filter="permission" placeholder="请输入权限" class="layui-input">\n' +
+                '    </div>\n' +
+                '  </div>' +
+                '  <div class="layui-form-item">\n' +
+                '    <div class="layui-input-block">\n' +
+                '      <button class="layui-btn" style="width: 90%" lay-submit lay-filter="save">'+(type=='upd'?"立即修改":"立即添加")+'</button>\n' +
+                '    </div>\n' +
+                '  </div>' +
+                '</form>'+
+                '</div>',
+            success:function(layero, index){
+                //渲染下拉框
+                treeSelect.render({
+                    // 选择器
+                    elem: '#parentId',
+                    // 数据
+                    data: '/permission/parentIdSelect?resourceType=menu',
+                    // 异步加载方式：get/post，默认get
+                    type: 'get',
+                    // 占位符
+                    placeholder: '顶级菜单',
+                    // 是否开启搜索功能：true/false，默认false
+                    search: true,
+                    style: {
+                        folder: {
+                            enable: false
+                        },
+                        line: {
+                            enable: true
+                        }
+                    },
+                    // 点击回调
+                    click: function(d){
+                        // console.log(d);
+                    },
+                    // 加载完成后的回调函数
+                    success: function (d) {
+                        // console.log(d);
+    //                选中节点，根据id筛选
+                        if (type == 'upd')
+                            treeSelect.checkNode('parentId', p.parentId);
+
+    //                获取zTree对象，可以调用zTree方法
+    //                var treeObj = treeSelect.zTree('tree');
+    //                console.log(treeObj);
+
+    //                刷新树结构
+    //                treeSelect.refresh('tree');
+                    }
+                });
+                //渲染图标
+                iconPicker.render({
+                    elem: '#iconPicker',
+                    type: 'fontClass',
+                    search: true,
+                    page: false,
+                    limit: 12,
+                    click: function (data) {
+                        // console.log(data);
+                    },
+                    success: function(d) {
+                        // console.log(d);
+                        if (type == 'upd')
+                            iconPicker.checkIcon('iconPicker', p.icon);
+                    }
+                });
+                //重新渲染form
+                form.render();
+                if (type == 'add'){
+                    //监听提交
+                    form.on('submit(save)', function(data){
+                        // console.log(data)
+                        // layer.msg("提交:"+data);
+
+                        $.ajax({
+                            url:'/permission/save',
+                            async:false,
+                            type:'post',
+                            dataType:'json',
+                            data:{permissionId:data.field.permissionId,
+                                permissionName:data.field.permissionName,
+                                resourceType:data.field.resourceType,
+                                url:data.field.url,
+                                permission:data.field.permission,
+                                parentId:data.field.parentId,
+                                icon:data.field.icon},
+                            success:function (d) {
+                                if (d.status){
+                                    layer.close(index);
+                                    layer.msg(d.msg, {icon: 1});
+                                    //刷新table
+                                    treeGrid.reload('treeTable',{});
+                                }else {
+                                    layer.msg(d.msg, {icon: 2,anim: 6});
+                                }
+                            },
+                            error:function (data) {
+                                // console.log(data);
+                                layer.msg('服务器请求失败', {icon: 2,anim: 6});
+                            }
+                        });
+
+                        return false;
+                    })
+                }else {
+                    //修改   给文本框付初始值
+                    form.val("permissionForm",{
+                        "oldPermissionId":p.permissionId,
+                        "permissionId":p.permissionId,
+                        "permissionName":p.permissionName,
+                        "url":p.url,
+                        "permission":p.permission,
+                        "resourceType":p.resourceType
+                    })
+                    //监听提交
+                    form.on('submit(save)', function(data){
+                        // console.log(data)
+                        // layer.msg("提交:"+data);
+
+                        $.ajax({
+                            url:'/permission/upd',
+                            async:false,
+                            type:'post',
+                            dataType:'json',
+                            data:{
+                                permissionId:data.field.permissionId,
+                                oldPermissionId:data.field.oldPermissionId,
+                                permissionName:data.field.permissionName,
+                                resourceType:data.field.resourceType,
+                                url:data.field.url,
+                                permission:data.field.permission,
+                                parentId:data.field.parentId,
+                                icon:data.field.icon},
+                            success:function (d) {
+                                if (d.status){
+                                    layer.close(index);
+                                    layer.msg(d.msg, {icon: 1});
+                                    //刷新table
+                                    treeGrid.reload('treeTable',{});
+                                }else {
+                                    layer.msg(d.msg, {icon: 2,anim: 6});
+                                }
+                            },
+                            error:function (data) {
+                                // console.log(data);
+                                layer.msg('服务器请求失败', {icon: 2,anim: 6});
+                            }
+                        });
+
+                        return false;
+                    })
+                }
+
+                //监听单选
+                form.on('radio(resourceType)', function(data){
+                    console.log("监听单选:"+data.value);
+                    if (data.value == 'button'){
+                        //权限路径和所属权限必填 lay-verify="required"
+                        $('#url').attr("lay-verify","required");
+                        $('#permission').attr("lay-verify","required");
+                        $('#parentId').attr("lay-verify","required");
+                    }else {
+                        //权限路径和所属权限 非必填
+                        $('#url').removeAttr("lay-verify");
+                        $('#permission').removeAttr("lay-verify");
+                        $('#parentId').removeAttr("lay-verify");
+                    }
+                });
+            }
+        })
+    }
 </script>
 </html>

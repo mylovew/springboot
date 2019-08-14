@@ -6,7 +6,7 @@ spring:
     show-sql: true
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://192.168.10.120:3306/springboot
+    url: jdbc:mysql://192.168.10.120:3306/springboot?useUnicode=true&characterEncoding=utf8
     username: root
     password: root
   thymeleaf:

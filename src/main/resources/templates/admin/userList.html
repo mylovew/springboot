@@ -230,7 +230,7 @@
         table.on('tool(userTable)', function(obj){
             var data = obj.data;
             if(obj.event === 'del'){
-                layer.confirm('确定要删除该用户吗', {
+                layer.confirm('确定要删除该用户吗?', {icon: 3, title:'提示'}, {
                     btn: ['确定', '取消'] //按钮
                 }, function () {
                     //TODO 去后台删除

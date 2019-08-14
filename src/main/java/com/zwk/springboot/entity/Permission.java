@@ -1,5 +1,6 @@
 package com.zwk.springboot.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -31,6 +32,10 @@ public class Permission implements Serializable {
     private String icon;
     @Transient
     private List<Permission> childList = null;
+    @Transient
+//    @JsonProperty(value = "lay_is_open")
+//    private boolean lay_is_open = false;
+
 
     @Override
     public String toString() {
@@ -43,6 +48,7 @@ public class Permission implements Serializable {
                 ", parentId='" + parentId + '\'' +
                 ", icon='" + icon + '\'' +
                 ", childList=" + childList +
+//                ", lay_is_open=" + lay_is_open +
                 '}';
     }
 }

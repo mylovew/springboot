@@ -13,6 +13,7 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
+import sun.rmi.runtime.Log;
 
 import javax.annotation.Resource;
 
@@ -38,8 +39,11 @@ public class MyShiroRealm extends AuthorizingRealm {
         for(Role role:user.getRoleList()){
             authorizationInfo.addRole(role.getRole());
             for(Permission p:role.getPermissionList()){
-                if (!p.getResourceType().equals("menu"))
-                authorizationInfo.addStringPermission(p.getPermission());
+                if (p.getUrl() != null && !p.getUrl().equals("")){
+//                    System.out.println(p.getPermission());
+                    authorizationInfo.addStringPermission(p.getPermission());
+                }
+
 //                authorizationInfo.addStringPermission(p.getUrl());
             }
         }

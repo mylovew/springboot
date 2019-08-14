@@ -38,9 +38,12 @@
                     <a href="javascript:;" th:text="${username}"></a>
                     <dl class="layui-nav-child">
                         <!-- 二级菜单 -->
-
                         <dd>
-                            <a href="/logout">退出登录</a></dd>
+                            <a href="#">个人信息</a>
+                        </dd>
+                        <dd>
+                            <a href="/logout">退出登录</a>
+                        </dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item to-index">
@@ -56,10 +59,10 @@
                 <ul id="nav" th:each="menu : ${menuList}">
                     <li>
                         <a  th:onclick="open_page([[${menu.url}]])">
-                            <i th:class="'layui-icon '+${menu.icon}" th:attr="lay-tips=${menu.permissionName}" ></i>
+                            <i th:class="'layui-icon '+${menu.icon}" style="color: white" th:attr="lay-tips=${menu.permissionName}" ></i>
                             <cite th:text="${menu.permissionName}"></cite>
                             <th:block th:if="${menu.url =='' || menu.url == null}">
-                                <i class="iconfont nav_right" th:unless="${#lists.isEmpty(menu.childList)}">&#xe697;</i>
+                                <i class="iconfont nav_right" style="color: white" th:unless="${#lists.isEmpty(menu.childList)}">&#xe697;</i>
                             </th:block>
 
                         </a>
@@ -75,10 +78,10 @@
                             <ul class="sub-menu">
                                 <li>
                                     <a  th:onclick="open_page([[${m.url}]])">
-                                        <i th:class="'layui-icon '+${m.icon}" th:attr="lay-tips=${m.permissionName}" ></i>
+                                        <i th:class="'layui-icon '+${m.icon}" style="color: white" th:attr="lay-tips=${m.permissionName}" ></i>
                                         <cite th:text="${m.permissionName}"></cite>
                                         <th:block th:if="${m.url =='' || m.url == null}">
-                                            <i class="iconfont nav_right" th:unless="${#lists.isEmpty(menu.childList)}">&#xe697;</i>
+                                            <i class="iconfont nav_right" style="color: white" th:unless="${#lists.isEmpty(menu.childList)}">&#xe697;</i>
                                         </th:block>
                                     </a>
                                     <th:block th:if="${m.url =='' || m.url == null}">

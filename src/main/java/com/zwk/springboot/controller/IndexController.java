@@ -31,6 +31,7 @@ public class IndexController {
         List<Permission> permissionList = user.getRoleList().get(0).getPermissionList();
 
         model.addAttribute("menuList",Menu.menuList(permissionList));
+        log.info(""+Menu.menuList(permissionList));
         model.addAttribute("username",user.getName());
         return "/admin/index";
     }

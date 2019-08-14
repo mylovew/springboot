@@ -19,7 +19,7 @@ import java.util.Objects;
 public class RolePermission {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private int rolePermissionId;
+    private Integer rolePermissionId;
     private Integer roleId;
     private Integer permissionId;
 
