@@ -39,5 +39,7 @@ public interface PermissionDao extends JpaRepository<Permission,String> {
     int updParentIdByParentId(String parentId,String oldParentId);
     List<Permission> findByResourceType(String resourceType);
     Permission findByPermissionId(String permissionId);
+    @Query(value = "select * from permission p right join role_permission rp on p.permission_id = rp.permission_id where rp.role_id = :#{#roleId}",nativeQuery = true)
+    List<Permission> findByRoleId(Integer roleId);
 
 }

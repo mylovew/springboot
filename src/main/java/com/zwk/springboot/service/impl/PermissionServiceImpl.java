@@ -35,7 +35,15 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public int deleteByPermissionId(String permissionId) {
-        return permissionDao.deleteByPermissionId(permissionId);
+        //删除绑定
+        rolePermissionDao.deleteByPermissionId(permissionId);
+        //删除子菜单绑定
+        rolePermissionDao.deleteBySelectPermissionIdByParentId(permissionId);
+        //删除子菜单
+        permissionDao.deleteByParentId(permissionId);
+        //删除当前菜单
+        int i = permissionDao.deleteByPermissionId(permissionId);
+        return i;
     }
 
     @Override
@@ -50,11 +58,15 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public int updByPermissionId(Permission permission,String oldPermissionId) {
-        int i = permissionDao.updByPermissionId(permission,oldPermissionId);
+        //判断ID是否改变
         if (!permission.getPermissionId().equals(oldPermissionId)){
+            //修改parentId 绑定字段
             permissionDao.updParentIdByParentId(permission.getPermissionId(),oldPermissionId);
+            //修改子菜单绑定
             rolePermissionDao.updPermissionIdByPermissionId(permission.getPermissionId(),oldPermissionId);
         }
+
+        int i = permissionDao.updByPermissionId(permission,oldPermissionId);
 
         return i;
     }
@@ -67,5 +79,10 @@ public class PermissionServiceImpl implements PermissionService {
     @Override
     public Permission findByPermissionId(String permissionId) {
         return permissionDao.findByPermissionId(permissionId);
+    }
+
+    @Override
+    public List<Permission> findByRoleId(Integer roleId) {
+        return permissionDao.findByRoleId(roleId);
     }
 }

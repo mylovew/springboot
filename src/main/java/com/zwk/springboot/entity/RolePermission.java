@@ -21,6 +21,6 @@ public class RolePermission {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer rolePermissionId;
     private Integer roleId;
-    private Integer permissionId;
+    private String permissionId;
 
 }

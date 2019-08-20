@@ -3,6 +3,7 @@ package com.zwk.springboot.service;
 import com.zwk.springboot.entity.Role;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @program: springboot
@@ -12,4 +13,9 @@ import java.util.List;
  */
 public interface RoleService {
     List<Role> findAll();
+    Role save(Role role);
+    int deleteByRoleId(Integer roleId);
+    int updByRoleId(Role role);
+    Long getCount();
+    List<Map<String,Object>> findByPage(Integer start, Integer limit);
 }

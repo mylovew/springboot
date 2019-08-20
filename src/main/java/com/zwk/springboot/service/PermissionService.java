@@ -8,6 +8,7 @@ import java.util.List;
 public interface PermissionService {
     List<Permission> findAll();
     Long getCount();
+    @Transactional
     int deleteByPermissionId(String permissionId);
     int deleteByParentId(String parentId);
     Permission save(Permission permission);
@@ -15,4 +16,5 @@ public interface PermissionService {
     int updByPermissionId(Permission permission,String oldPermissionId);
     List<Permission> findByResourceType(String resourceType);
     Permission findByPermissionId(String permissionId);
+    List<Permission> findByRoleId(Integer roleId);
 }

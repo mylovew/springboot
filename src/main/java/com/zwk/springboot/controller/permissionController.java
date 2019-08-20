@@ -82,9 +82,6 @@ public class permissionController {
         try {
             //删除菜单
             permissionService.deleteByPermissionId(permissionId);
-            //删除子菜单
-            permissionService.deleteByParentId(permissionId);
-            //TODO 角色绑定的权限也要删除
             return new ResultAPI(1,"删除成功");
         }catch (Exception e){
             e.printStackTrace();

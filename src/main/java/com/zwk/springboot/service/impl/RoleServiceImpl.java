@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @program: springboot
@@ -22,5 +23,30 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public List<Role> findAll() {
         return roleDao.findAll();
+    }
+
+    @Override
+    public Role save(Role role) {
+        return roleDao.save(role);
+    }
+
+    @Override
+    public int deleteByRoleId(Integer roleId) {
+        return roleDao.deleteByRoleId(roleId);
+    }
+
+    @Override
+    public int updByRoleId(Role role) {
+        return roleDao.updByRoleId(role);
+    }
+
+    @Override
+    public Long getCount() {
+        return roleDao.getCount();
+    }
+
+    @Override
+    public List<Map<String, Object>> findByPage(Integer start, Integer limit) {
+        return roleDao.findByPage(start,limit);
     }
 }
