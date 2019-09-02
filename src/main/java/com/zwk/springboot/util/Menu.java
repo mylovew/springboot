@@ -65,6 +65,7 @@ public class Menu {
             mapPer.put("id",p.getPermissionId());
             mapPer.put("title",p.getPermissionName());
             mapPer.put("url",p.getUrl());
+            mapPer.put("spread",true);
             mapPer.put("children",tree_mapList(p.getChildList()));
             treeData.add(mapPer);
         }

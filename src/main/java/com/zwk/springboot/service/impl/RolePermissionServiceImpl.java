@@ -3,6 +3,7 @@ package com.zwk.springboot.service.impl;
 import com.zwk.springboot.dao.RolePermissionDao;
 import com.zwk.springboot.entity.RolePermission;
 import com.zwk.springboot.service.RolePermissionService;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
  * @author: wkzhang
  * @create: 2019-08-15 11:38
  */
+@Service
 public class RolePermissionServiceImpl implements RolePermissionService {
     @Resource
     private RolePermissionDao rolePermissionDao;

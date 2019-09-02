@@ -19,8 +19,8 @@ public interface RoleDao extends JpaRepository<Role,Integer> {
     @Transactional
     @Modifying
     @Query(value = "UPDATE role r set " +
-            "r.role = CASE WHEN :#{#role.role} IS NULL THEN r.role ELSE :#{#role.role} END," +
-            "r.description = CASE WHEN :#{#role.description} IS NULL THEN r.description ELSE :#{#role.description} END" +
+            "r.role_name = CASE WHEN :#{#role.roleName} IS NULL THEN r.role_name ELSE :#{#role.roleName} END," +
+            "r.description = CASE WHEN :#{#role.description} IS NULL THEN r.description ELSE :#{#role.description} END " +
             "where r.role_id = :#{#role.roleId} " , nativeQuery = true)
     int updByRoleId(Role role);
 

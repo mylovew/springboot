@@ -2,6 +2,7 @@ package com.zwk.springboot.controller;
 
 import com.zwk.springboot.entity.LoginResult;
 import com.zwk.springboot.service.LoginService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
@@ -22,6 +23,7 @@ import java.util.Map;
  * @create: 2019-08-02 15:47
  */
 @Controller
+@Slf4j
 public class HomeController {
     @Resource
     private LoginService loginService;

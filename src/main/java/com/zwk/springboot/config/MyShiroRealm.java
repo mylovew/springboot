@@ -37,7 +37,7 @@ public class MyShiroRealm extends AuthorizingRealm {
 //        String userName  = (String)principals.getPrimaryPrincipal();
         User user = (User)principals.getPrimaryPrincipal();;
         for(Role role:user.getRoleList()){
-            authorizationInfo.addRole(role.getRole());
+            authorizationInfo.addRole(role.getRoleName());
             for(Permission p:role.getPermissionList()){
                 if (p.getUrl() != null && !p.getUrl().equals("")){
 //                    System.out.println(p.getPermission());

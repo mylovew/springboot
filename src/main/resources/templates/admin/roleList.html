@@ -31,16 +31,19 @@
     <table  id="roleTable" lay-filter="roleTable"></table>
 
     <script type="text/html" id="barDemo" >
+        <a class="layui-btn layui-btn-radius layui-btn-warm layui-btn-sm" style="height: 25px;line-height: 26px" lay-event="editPermission">权限</a>
         <a class="layui-btn layui-btn-radius layui-btn-sm" style="height: 25px;line-height: 26px" lay-event="edit">编辑</a>
         <a class="layui-btn layui-btn-radius layui-btn-danger layui-btn-sm" style="height: 25px;line-height: 26px" lay-event="del">删除</a>
     </script>
 </body>
 <script th:inline="none">//破除thymeleaf标记
     //注意：导航 依赖 element 模块，否则无法进行功能性操作
-    layui.use(['element','table','form'], function () {
+    layui.use(['element','table','form','layer','tree'], function () {
         var element = layui.element;
         var table = layui.table;
         var form = layui.form;
+        var layer = layui.layer;
+        var tree = layui.tree;
         table.render({
             elem: '#roleTable'
             ,url:'/role/roleListPage'
@@ -49,9 +52,9 @@
             ,cols: [[
                 // {type: 'checkbox', fixed: 'left'},
                 {field:'role_id', title:'ID',width:80, fixed: 'left', unresize: true, sort: true}
-                ,{field:'role', title:'角色',width:150}
+                ,{field:'role_name', title:'角色',width:150}
                 ,{field:'description', title:'描述',width:300}
-                ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
+                ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:200}
             ]]
             ,page: true
         });
@@ -60,89 +63,53 @@
             // var checkStatus = table.checkStatus(obj.config.id);
             switch(obj.event){
                 case 'addRole':
-                    editUser(null);
+                    editRole(null);
                     break;
             };
         });
-        function editUser(user){
-            console.log(user)
+        function editRole(role){
+            console.log(role)
             layer.open({
-                title:user==null?"新增用户":"修改用户",
+                title:role==null?"新增角色":"修改角色",
                 type:1,
-                area: ['410px', '450px'], //宽高
+                area: ['410px', '230px'], //宽高
                 content:'<div style="width: 350px;margin-top: 20px;">' +
-                    '<form method="post" class="layui-form" lay-filter="userForm">\n' +
-                    '  <input type="hidden" id="userId" name="userId">' +
+                    '<form method="post" class="layui-form" lay-filter="roleForm">\n' +
+                    '  <input type="hidden" id="roleId" name="roleId">' +
                     '  <div class="layui-form-item">\n' +
-                    '    <label class="layui-form-label">用户名</label>\n' +
+                    '    <label class="layui-form-label">角色名</label>\n' +
                     '    <div class="layui-input-block">\n' +
-                    '      <input type="text" id="name" name="name" required lay-verify="required" autocomplete="off" placeholder="请输入用户名" class="layui-input">\n' +
+                    '      <input type="text" id="roleName" name="roleName" required lay-verify="required" autocomplete="off" placeholder="请输入角色名" class="layui-input">\n' +
                     '    </div>\n' +
                     '  </div>' +
                     '  <div class="layui-form-item">\n' +
-                    '    <label class="layui-form-label">密码</label>\n' +
+                    '    <label class="layui-form-label">描述</label>\n' +
                     '    <div class="layui-input-block">\n' +
-                    '      <input type="password" id="password" name="password" '+(user==null?'lay-verify="required"':'')+'  autocomplete="off" placeholder="请输入密码" class="layui-input" '+(user==null?"":"disabled")+' >\n' +
-                    '    </div>\n' +
-                    '  </div>' +
-                    '   <div class="layui-form-item">' +
-                    '      <label class="layui-form-label">手机</label>\n' +
-                    '      <div class="layui-input-block">\n' +
-                    '        <input type="tel" id="phone" name="phone" lay-verify="phone" placeholder="请输入手机号" autocomplete="off" class="layui-input">\n' +
-                    '      </div>\n' +
-                    '   </div>' +
-                    '  <div class="layui-form-item">\n' +
-                    '    <label class="layui-form-label">角色</label>\n' +
-                    '    <div class="layui-input-block">\n' +
-                    '      <select  lay-verify="required" id="roleId" name="roleId">\n' +
-                    '        <option value="">请选择角色</option>\n' +
-                    '      </select>\n' +
-                    '    </div>\n' +
-                    '  </div>' +
-                    '  <div class="layui-form-item">\n' +
-                    '    <label class="layui-form-label">状态</label>\n' +
-                    '    <div class="layui-input-block">\n' +
-                    '      <input type="radio" name="state" value="1" title="正常" checked="">\n' +
-                    '      <input type="radio" name="state" value="0" title="未激活">\n' +
-                    '      <input type="radio" name="state" value="2" title="锁定">\n' +
+                    '      <input type="text" id="description" name="description" autocomplete="off" placeholder="请输入描述" class="layui-input" >\n' +
                     '    </div>\n' +
                     '  </div>' +
                     '  <div class="layui-form-item">\n' +
                     '    <div class="layui-input-block">\n' +
-                    '      <button class="layui-btn" style="width: 90%" lay-submit lay-filter="save">'+(user==null?"立即添加":"立即修改")+'</button>\n' +
+                    '      <button class="layui-btn" style="width: 90%" lay-submit lay-filter="save">'+(role==null?"立即添加":"立即修改")+'</button>\n' +
                     '    </div>\n' +
                     '  </div>' +
                     '</form>' +
                     '</div>',
                 success:function(layero, index){
-                    //补充下拉框信息
-                    $.ajax({
-                        url:'/role/findAll',
-                        async:false,
-                        type:'post',
-                        dataType:'json',
-                        success:function (d) {
-                            var op = "";
-                            for (i = 0; i < d.length ; i++){
-                                op += '"<option value="'+ d[i].roleId +'">'+ d[i].role +'</option>"';
-                            }
-                            $("#roleId").append(op);
-                        }
-                    })
                     //重新渲染form
                     form.render();
                     //初始化
-                    if (user == null){
+                    if (role == null){
+
                         //添加
                         //监听提交
                         form.on('submit(save)', function(data){
-                            console.log(data.field.username);
                             $.ajax({
-                                url:'/user/save',
+                                url:'/role/save',
                                 async:false,
                                 type:'post',
                                 dataType:'json',
-                                data:{name:data.field.name,password:data.field.password,phone:data.field.phone,state:data.field.state,roleId:data.field.roleId},
+                                data:{roleName:data.field.roleName,description:data.field.description},
                                 success:function (d) {
                                     console.log(d);
                                     if (d.status){
@@ -155,7 +122,7 @@
                                             , where: {//这里传参  向后台
                                                 //可传多个参数到后台...  ，分隔
                                             }
-                                            ,url:'/user/userListPage'//后台做模糊搜索接口路径
+                                            ,url:'/role/roleListPage'//后台做模糊搜索接口路径
                                             , method: 'post'
                                         });
                                         layer.close(index);
@@ -173,22 +140,19 @@
                         });
                     }else {
                         //修改   给文本框付初始值
-                        form.val("userForm",{
-                            "userId":user.user_id,
-                            "name":user.name,
-                            // "password":user.password,
-                            "phone":user.phone,
-                            "roleId":user.role_id,
-                            "state":user.state==0?'0':user.state==1?'1':'2'
+                        form.val("roleForm",{
+                            "roleId":role.role_id,
+                            "roleName":role.role_name,
+                            "description":role.description
                         })
                         //监听提交
                         form.on('submit(save)', function(data){
 
                             $.ajax({
-                                url:'/user/upd',
+                                url:'/role/upd',
                                 async:false,
                                 type:'post',
-                                data:{userId:data.field.userId,name:data.field.name,password:data.field.password,phone:data.field.phone,state:data.field.state,roleId:data.field.roleId},
+                                data:{roleId:data.field.roleId,roleName:data.field.roleName,description:data.field.description},
                                 dataType:'json',
                                 success:function (d) {
                                     if (d.status){
@@ -201,7 +165,7 @@
                                             , where: {//这里传参  向后台
                                                 //可传多个参数到后台...  ，分隔
                                             }
-                                            ,url:'/user/userListPage'//后台做模糊搜索接口路径
+                                            ,url:'/role/roleListPage'//后台做模糊搜索接口路径
                                             , method: 'post'
                                         });
                                         layer.close(index);
@@ -225,14 +189,14 @@
         table.on('tool(roleTable)', function(obj){
             var data = obj.data;
             if(obj.event === 'del'){
-                layer.confirm('确定要删除该用户吗?', {icon: 3, title:'提示'}, {
-                    btn: ['确定', '取消'] //按钮
+                layer.confirm('删除该角色后与该角色绑定的用户需要重新绑定角色，确定要删除该角色吗?',{
+                    btn: ['确定', '取消'],icon: 3, title:'提示' //按钮
                 }, function () {
                     //TODO 去后台删除
                     $.ajax({
-                        url:"/user/del",
+                        url:"/role/del",
                         type:"post",
-                        data:{user_id:data.user_id},
+                        data:{roleId:data.role_id},
                         success:function (d) {
                             if (d.status){
                                 obj.del();
@@ -249,7 +213,69 @@
                     //取消
                 });
             } else if(obj.event === 'edit'){
-                editUser(data);
+                editRole(data);
+            }else if(obj.event === 'editPermission'){
+                //修改权限
+                layer.open({
+                    title:"【"+data.role_name+"】权限",
+                    type:1,
+                    btn:["修改"],
+                    area: ['510px', '550px'], //宽高
+                    content:'<div id="permissionTree"></div>' +
+                        '<div style="margin: 10px 10px;">' +
+                        '   <button id="updPermission" class="layui-btn">保存修改</button>' +
+                        '</div>',
+                    success:function(layero, index){
+                        $("#updPermission").click(function () {
+                            layer.msg("修改")
+                        });
+                        //加载总权限
+                        $.ajax({
+                            url:'/role/findAllPermission',
+                            dataType:'json',
+                            success:function (d) {
+                                if (d.status == 1){
+                                    tree.render({
+                                        elem: '#permissionTree'  //绑定元素
+                                        ,id:'permissionTree'
+                                        ,showCheckbox:true
+                                        ,data:d.data
+                                    })
+                                    //获取数值
+                                    $.ajax({
+                                        url:'/role/findPermissionByRoleId',
+                                        dataType:'json',
+                                        data:{roleId:data.role_id},
+                                        success:function (d) {
+                                            if (d.status == 1){
+                                                console.log(d.data)
+                                                tree.setChecked('permissionTree', d.data);
+                                            }else {
+                                                layer.msg(d.msg,{icon: 2,anim: 6});
+                                            }
+                                        },
+                                        error:function (data) {
+                                            console.log(data);
+                                            layer.msg('服务器请求失败', {icon: 2,anim: 6});
+                                        }
+                                    })
+                                }else {
+                                    layer.msg(d.msg,{icon: 2,anim: 6});
+                                }
+                            },
+                            error:function (data) {
+                                console.log(data);
+                                layer.msg('服务器请求失败', {icon: 2,anim: 6});
+                            }
+                        })
+
+
+                    }
+                    ,
+                    yes:function(index,layero) {
+                        layer.msg("修改");
+                    }
+                })
             }
         });
     });

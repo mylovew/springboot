@@ -1,5 +1,6 @@
 package com.zwk.springboot;
 
+import com.zwk.springboot.util.HttpUtils;
 import com.zwk.springboot.util.MD5;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.Test;
@@ -17,8 +18,9 @@ public class SpringbootApplicationTests {
     public void contextLoads() {
     }
     public static void main(String[] args) throws UnsupportedEncodingException {
-        String bb= DigestUtils.md5Hex("62552964123420190815120000company@97Result(*)".getBytes("UTF-8")).toUpperCase();
-//        String bb= MD5.MD5("62552964123420190815120000company@97Result(*)");
-        System.out.println(bb);
+        DisableSSLCertificateCheckUtil.disableChecks();
+        String url = "https://192.168.22.104:8088/serverhttps/test";
+        String s = HttpUtils.httpsConnection(url,"GET",null,"UTF-8");
+        System.out.println("返回结果："+s);
     }
 }

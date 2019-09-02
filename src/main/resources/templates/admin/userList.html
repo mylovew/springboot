@@ -50,7 +50,7 @@
                 // {type: 'checkbox', fixed: 'left'},
                 {field:'user_id', title:'ID',width:80, fixed: 'left', unresize: true, sort: true}
                 ,{field:'name', title:'用户名',width:200 }
-                ,{field:'role', title:'角色',width:150}
+                ,{field:'role_name', title:'角色',width:150}
                 ,{field:'state', title:'状态',width:100
                     ,templet: function(d){
                         return d.state == 0?'未激活':d.state == 1?'正常':'锁定'
@@ -129,7 +129,7 @@
                         success:function (d) {
                             var op = "";
                             for (i = 0; i < d.length ; i++){
-                                op += '"<option value="'+ d[i].roleId +'">'+ d[i].role +'</option>"';
+                                op += '"<option value="'+ d[i].roleId +'">'+ d[i].roleName +'</option>"';
                             }
                             $("#roleId").append(op);
                         }
@@ -230,8 +230,8 @@
         table.on('tool(userTable)', function(obj){
             var data = obj.data;
             if(obj.event === 'del'){
-                layer.confirm('确定要删除该用户吗?', {icon: 3, title:'提示'}, {
-                    btn: ['确定', '取消'] //按钮
+                layer.confirm('确定要删除该用户吗?', {
+                    btn: ['确定', '取消'],icon: 3, title:'提示' //按钮
                 }, function () {
                     //TODO 去后台删除
                     $.ajax({

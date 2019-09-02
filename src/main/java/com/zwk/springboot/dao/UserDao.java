@@ -11,7 +11,7 @@ import java.util.Map;
 
 public interface UserDao extends JpaRepository<User,Integer> {
     User findByName(String name);
-    @Query(value = "select user.*,role.role_id,role.role from user left join user_role on user_role.user_id = user.user_id left join role on role.role_id = user_role.role_id ORDER BY user.user_id ASC  limit ?1,?2",nativeQuery = true)
+    @Query(value = "select user.*,role.role_id,role.role_name from user left join user_role on user_role.user_id = user.user_id left join role on role.role_id = user_role.role_id ORDER BY user.user_id ASC  limit ?1,?2",nativeQuery = true)
     List<Map<String,Object>> findByPage(Integer start, Integer limit);
     @Query(value = "select count(*) from User",nativeQuery = true)
     Long getCount();

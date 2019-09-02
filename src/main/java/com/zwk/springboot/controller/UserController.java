@@ -6,16 +6,14 @@ import com.zwk.springboot.service.UserRoleService;
 import com.zwk.springboot.service.UserService;
 import com.zwk.springboot.util.MD5;
 import com.zwk.springboot.util.ResultAPI;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.sql.SQLException;
@@ -32,8 +30,8 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("user")
+@Slf4j
 public class UserController {
-    private static final Logger log = LoggerFactory.getLogger(UserController.class);
     @Resource
     private UserService userService;
     @Resource
@@ -42,7 +40,6 @@ public class UserController {
     @RequestMapping("userList")
     public String userList(Map<String,Object> map){
         log.info("去userList页面");
-
         return "/admin/userList";
     }
     @RequiresPermissions(value = "user:userList")
@@ -59,7 +56,7 @@ public class UserController {
     }
 
     @RequiresPermissions(value = "user:del")
-    @RequestMapping("del")
+    @RequestMapping(value = "del",method = RequestMethod.POST)
     @ResponseBody
     public ResultAPI del(Integer user_id){
         log.info("删除用户");
@@ -72,7 +69,7 @@ public class UserController {
         return new ResultAPI(0,"删除失败");
     }
     @RequiresPermissions(value = "user:save")
-    @RequestMapping("save")
+    @RequestMapping(value = "save",method = RequestMethod.POST)
     @ResponseBody
     public ResultAPI save(User user, Integer roleId){
         log.info("新增用户:"+user.toString());
@@ -93,7 +90,7 @@ public class UserController {
         return new ResultAPI(0,"添加失败");
     }
     @RequiresPermissions(value = "user:upd")
-    @RequestMapping("upd")
+    @RequestMapping(value = "upd",method = RequestMethod.POST)
     @Transactional//事务
     @ResponseBody
     public ResultAPI upd(User user, Integer roleId) throws SQLException{

@@ -5,6 +5,7 @@ import com.zwk.springboot.entity.Permission;
 import com.zwk.springboot.service.PermissionService;
 import com.zwk.springboot.util.Menu;
 import com.zwk.springboot.util.ResultAPI;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,8 +28,8 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("permission")
+@Slf4j
 public class permissionController {
-    private Logger log = LoggerFactory.getLogger(permissionController.class);
     @Resource
     private PermissionService permissionService;
     @RequiresPermissions(value = "permission:permissionList")

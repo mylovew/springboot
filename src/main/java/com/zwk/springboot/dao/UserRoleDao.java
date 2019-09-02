@@ -17,4 +17,10 @@ public interface UserRoleDao extends JpaRepository<UserRole,Integer> {
     @Transactional
     @Query(value = "update user_role set role_id = ?1 where user_id = ?2 ",nativeQuery = true)
     int updRoleIdByUserId(Integer roleId,Integer userId);
+
+    @Transactional
+    int deleteByRoleId(Integer roleId);
+
+    @Transactional
+    int deleteByUserId(Integer userId);
 }

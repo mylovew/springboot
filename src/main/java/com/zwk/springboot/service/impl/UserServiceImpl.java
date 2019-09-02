@@ -1,6 +1,7 @@
 package com.zwk.springboot.service.impl;
 
 import com.zwk.springboot.dao.UserDao;
+import com.zwk.springboot.dao.UserRoleDao;
 import com.zwk.springboot.entity.User;
 import com.zwk.springboot.service.UserService;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,9 @@ import java.util.Map;
 public class UserServiceImpl implements UserService {
     @Resource
     private UserDao userDao;
+    @Resource
+    private UserRoleDao userRoleDao;
+
 
 
     @Override
@@ -45,8 +49,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteByUserId(Integer userId) {
-        System.out.println("userid: "+ userId);
         userDao.deleteByUserId(userId);
+        userRoleDao.deleteByUserId(userId);
     }
 
     @Override

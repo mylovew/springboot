@@ -1,6 +1,9 @@
 package com.zwk.springboot.service.impl;
 
+import com.sun.org.apache.regexp.internal.RE;
 import com.zwk.springboot.dao.RoleDao;
+import com.zwk.springboot.dao.RolePermissionDao;
+import com.zwk.springboot.dao.UserRoleDao;
 import com.zwk.springboot.entity.Role;
 import com.zwk.springboot.service.RoleService;
 import org.springframework.stereotype.Service;
@@ -19,6 +22,10 @@ import java.util.Map;
 public class RoleServiceImpl implements RoleService {
     @Resource
     private RoleDao roleDao;
+    @Resource
+    private UserRoleDao userRoleDao;
+    @Resource
+    private RolePermissionDao rolePermissionDao;
 
     @Override
     public List<Role> findAll() {
@@ -32,7 +39,10 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public int deleteByRoleId(Integer roleId) {
-        return roleDao.deleteByRoleId(roleId);
+        int i = roleDao.deleteByRoleId(roleId);
+        userRoleDao.deleteByRoleId(roleId);
+        rolePermissionDao.deleteByRoleId(roleId);
+        return i;
     }
 
     @Override

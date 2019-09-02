@@ -11,6 +11,7 @@ public interface UserService {
     User findByName(String name);
     List<Map<String,Object>> findByPage(Integer start, Integer limit);
     Long getCount();
+    @Transactional
     void deleteByUserId(Integer userId);
     User save(User user);
     int updByUserId(User user);

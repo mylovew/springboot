@@ -3,6 +3,7 @@ package com.zwk.springboot.controller;
 import com.zwk.springboot.entity.Permission;
 import com.zwk.springboot.entity.User;
 import com.zwk.springboot.util.Menu;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,8 +21,8 @@ import java.util.*;
  */
 @Controller
 @RequestMapping("index")
+@Slf4j
 public class IndexController {
-    private Logger log = LoggerFactory.getLogger(IndexController.class);
     @RequestMapping("toIndex")
     public String toIndex(Model model){
         User user = (User)SecurityUtils.getSubject().getPrincipal();

@@ -23,8 +23,8 @@ public class Role implements Serializable {
     private static final long serialVersionUID = -16939265717116877L;
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private int roleId;
-    private String role;
+    private Integer roleId;
+    private String roleName;
     private String description;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "role_permission", joinColumns = {@JoinColumn(name = "role_id")},inverseJoinColumns = {@JoinColumn(name = "permission_id")})
@@ -34,7 +34,7 @@ public class Role implements Serializable {
     public String toString() {
         return "Role{" +
                 "roleId=" + roleId +
-                ", role='" + role + '\'' +
+                ", role='" + roleName + '\'' +
                 ", description='" + description + '\'' +
                 ", permissionList=" + permissionList +
                 '}';

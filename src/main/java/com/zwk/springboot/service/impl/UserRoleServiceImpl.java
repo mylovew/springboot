@@ -20,4 +20,14 @@ public class UserRoleServiceImpl implements UserRoleService {
     public int updRoleIdByUserId(Integer roleId, Integer userId) {
         return userRoleDao.updRoleIdByUserId(roleId,userId);
     }
+
+    @Override
+    public int deleteByRoleId(Integer roleId) {
+        return userRoleDao.deleteByRoleId(roleId);
+    }
+
+    @Override
+    public int deleteByUserId(Integer userId) {
+        return userRoleDao.deleteByUserId(userId);
+    }
 }
